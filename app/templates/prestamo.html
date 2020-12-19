@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form class="formulario">
+        <div class="left">
+            <h2>PRESTAMO DE CUENTA NO. 000000000</h2>
+        
+            <p>MONTO ACTUAL: Q 100000000</p>
+            <input class="text_box" type="number" size="40" placeholder="MONTO">
+
+            <p></p>
+            <select>
+                <option value="0">TIPO DE PRESTAMO:</option>
+                <option value="1">QUINCENAL</option>
+                <option value="2">MENSUAL</option>
+                <option value="3">TRIMESTRAL</option>
+            </select>
+        
+            <p></p>
+            <input class="button" type="submit" value="ACEPTAR">
+        <div>
+    </form>
+{% endblock %}

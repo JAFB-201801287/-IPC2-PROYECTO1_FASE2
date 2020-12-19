@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="formulario">
+        <h2>CUENTAS DEL CLIENTE NO. 000000000</h2>
+
+        <table class="tabla">
+            <tr>
+                <th><strong>NO. CUENTA</strong></th>
+                <th><strong>TIPO DE CUENTA</strong></th>
+                <th><strong>MONTO</strong></th>
+                <th><strong>OPCIONES</strong></th>
+            </tr>
+            
+            <tr>
+                <td>0000000000</td>
+                <td>MONETARIA</td>
+                <td>Q 10</td>
+                <td><a href="{% url 'detalle_cuenta' %}">VER DETALLE</a></td>
+            </tr>
+            
+            <tr>
+                <td>1111111111</td>
+                <td>AHORRO</td>
+                <td>Q 20</td>
+                <td><a href="{% url 'detalle_cuenta' %}">VER DETALLE</a></td>
+            </tr>
+            
+            <tr>
+                <td>2222222222</td>
+                <td>AHORRO A PLAZO FIJO</td>
+                <td>Q 30</td>
+                <td><a href="{% url 'detalle_cuenta' %}">VER DETALLE</a></td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

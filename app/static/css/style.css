@@ -1,0 +1,91 @@
+body {
+    background-color: #bdecb6;
+    background-image: url("cromabox-fondo-web.png");
+}
+
+
+#navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+#navbar li {
+    float: left;
+}
+
+#navbar li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.title_principal {
+    text-align: center;
+    text-decoration: underline;
+    font-size: 25px;
+
+}
+/*LOGIN ------------------------------------------*/
+
+.formulario {
+    text-align: center;
+    margin-top: 100px;
+}
+
+.text_box {
+    background-color: azure;
+    width: 40%;
+    padding: 10px 20px;
+    margin: 10px 3%;
+}
+
+.text_box::placeholder {
+    font-size: 1.2em;
+}
+
+.button {
+    background-color: transparent;
+    color: black; 
+    border: 2px solid #4CAF50;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+  
+.button:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* TABLA DE CUENTAS ------------------------------------------------*/
+
+.tabla {
+    width: 80%;
+    margin: auto;
+    border-collapse: collapse;
+}
+
+.tabla, th, td {
+    padding: 15px;
+    text-align: center;
+    border: 2px solid black;
+    background-color: honeydew;
+}
+
+.enlace {
+    text-decoration: none;
+}
+
+/* DETALLE CUENTA*/
+
+.informacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
