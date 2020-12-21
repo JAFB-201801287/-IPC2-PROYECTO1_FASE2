@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="formulario">
+        <h2>{{ titulo }}</h2>
+
+        <table class="tabla">
+            <tr>
+                <th><strong>CUI</strong></th>
+                <th><strong>NIT</strong></th>
+                <th><strong>NOMBRE</strong></th>
+                <th><strong>APELLIDO</strong></th>
+                <th><strong>FECHA DE NACIMIENTO</strong></th>
+            </tr>
+            {% for a, b, c, d, e in lista %}
+                <tr>
+                    <td>{{ a }}</td>
+                    <td>{{ b }}</td>
+                    <td>{{ c }}</td>
+                    <td>{{ d }}</td>
+                    <td>{{ e }}</td>
+                </tr>
+            {% endfor %}
+
+
+        </table>
+        <br/>
+        <form method="POST">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
+{% endblock %}

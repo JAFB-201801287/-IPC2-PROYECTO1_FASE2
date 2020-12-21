@@ -44,6 +44,13 @@ body {
     margin: 10px 3%;
 }
 
+input {
+    background-color: azure;
+    width: 40%;
+    padding: 10px 20px;
+    margin: 10px 3%;
+}
+
 .text_box::placeholder {
     font-size: 1.2em;
 }
