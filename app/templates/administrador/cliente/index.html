@@ -2,7 +2,10 @@
 {% block content %}
     <div class="formulario">
         <h2>{{ titulo }}</h2>
-
+        <br/>
+        <a class="button" href="{% url 'admistrador_agregar_cliente' %}">AGREGAR NUEVO CLIENTE</a>
+        <p></p>
+        <br/>
         <table class="tabla">
             <tr>
                 <th><strong>CUI</strong></th>
@@ -23,11 +26,5 @@
 
 
         </table>
-        <br/>
-        <form method="POST">
-            {{ form.as_p }}
-            {% csrf_token %}
-            <button type="submit">Registrar</button>
-        </form>
     </div>
 {% endblock %}
