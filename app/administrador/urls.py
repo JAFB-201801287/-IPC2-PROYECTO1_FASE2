@@ -23,4 +23,5 @@ urlpatterns = [
     path('administrador/cliente/', views.lista_cliente, name='admistrador_cliente'),
     path('administrador/cliente/agregar', views.agregar_cliente, name='admistrador_agregar_cliente'),
     path('administrador/empresa/', views.lista_empresa, name='admistrador_empresa'),
+    path('administrador/empresa/agregar', views.agregar_empresa, name='admistrador_agregar_empresa'),
 ]
