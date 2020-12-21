@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="formulario">
+        <h2>{{ titulo }}</h2>
+        <br/>
+        <a class="button" href="{% url 'admistrador_agregar_cliente' %}">AGREGAR NUEVO CLIENTE EMPRESARIAL</a>
+        <p></p>
+        <br/>
+        <table class="tabla">
+            <tr>
+                <th><strong>NOMBRE</strong></th>
+                <th><strong>NOMBRE COMERCIAL</strong></th>
+                <th><strong>NOMBRE DEL REPRESENTANTE</strong></th>
+            </tr>
+            {% for a, b, c in lista %}
+                <tr>
+                    <td>{{ a }}</td>
+                    <td>{{ b }}</td>
+                    <td>{{ c }}</td>
+                </tr>
+            {% endfor %}
+
+
+        </table>
+    </div>
+{% endblock %}

@@ -21,5 +21,6 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('administrador/login/', views.login, name='admistrador_login'),
     path('administrador/cliente/', views.lista_cliente, name='admistrador_cliente'),
-    path('administrador/cliente/agregar', views.agregar_cliente, name='admistrador_agregar_cliente')
+    path('administrador/cliente/agregar', views.agregar_cliente, name='admistrador_agregar_cliente'),
+    path('administrador/empresa/', views.lista_empresa, name='admistrador_empresa'),
 ]

@@ -24,8 +24,10 @@ def lista_cliente(request):
 def agregar_cliente(request):
     form = cliente()
     titulo_pantalla = "AGREGAR NUEVO CLIENTE INDIVIDUAL"
+    regresar = 'admistrador_cliente'
     variables = {
         "titulo" : titulo_pantalla,
+        "regresar": regresar,
         "form": form
     }
     if (request.method == "POST"):
@@ -62,12 +64,27 @@ def agregar_cliente(request):
             form = cliente()
             variables = {
                 "titulo" : titulo_pantalla,
+                "regresar": regresar,
                 "form": form
             }
         else:
             nombre= "INFORMACION INVALIDA"
             variables = {
                 "titulo" : titulo_pantalla,
+                "regresar": regresar,
                 "form": form
             }
     return render(request, 'administrador/agregar.html', variables)
+
+def lista_empresa(request):
+    titulo_pantalla = "CLIENTES EMPRESARIALES"
+    a = Empresa.objects.all().values_list()  # devuelve una lista
+    print(a)
+
+    if not a:
+        print("NO HAY EMPRESAS")
+    variables = {
+        "titulo" : titulo_pantalla,
+        "lista": a
+    }
+    return render(request, 'administrador/empresa/index.html',variables)
