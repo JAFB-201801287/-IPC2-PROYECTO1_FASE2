@@ -1,5 +1,6 @@
 from django import forms
 from .models import *
+from django.db.models import Q
 
 class cliente(forms.Form):
     nombre_usuario = forms.CharField(required = True, max_length=20, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'NOMBRE DE USUARIO'}))
@@ -24,3 +25,20 @@ class empresa(forms.Form):
 
     class Meta:
         fields = ("nombre_usuario","contrasena", "nombre", "nombre_comercial", "nombre_representante")
+
+class cuenta(forms.Form):
+    monto = forms.IntegerField(required = True, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'MONTO'}))
+    TIPOS_CUENTA = [('', '- SELECCIONAR TIPO DE CUENTA -'), ('MONETARIA', 'MONETARIA'), ('CUENTA DE AHORRO', 'CUENTA DE AHORRO'), ('CUENTA DE AHORRO A PLAZO FIJO', 'CUENTA DE AHORRO A PLAZO FIJO')]
+    tipo_cuenta = forms.ChoiceField(required = True, help_text='', label='TIPOS DE CUENTA', choices=TIPOS_CUENTA)
+    TIPOS_MONEDA = [('', '- SELECCIONAR TIPO DE MONEDA -'), ('QUETZAL', 'QUETZAL'), ('DOLLAR', 'DOLLAR')]
+    tipo_moneda = forms.ChoiceField(required = True, help_text='', label='TIPOS DE MONEDA', choices=TIPOS_MONEDA)
+    USUARIOS = [('', '- SELECCIONAR USUARIO -')]
+    for user in Usuario.objects.all().values_list():
+        USUARIOS.append((user[0], user[1]))
+    usuario = forms.ChoiceField(required = True, help_text='', label='USUARIOS', choices=USUARIOS)
+
+    class Meta:
+        fields = ("monto","tipo_cuenta", "tipo_cuenta", "usuario")
+
+
+

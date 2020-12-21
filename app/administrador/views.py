@@ -139,3 +139,47 @@ def agregar_empresa(request):
                 "form": form
             }
     return render(request, 'administrador/agregar.html', variables)
+
+def agregar_cuenta(request):
+    form = cuenta()
+    titulo_pantalla = "ABRIR CUENTA PARA CLIENTE"
+    regresar = 'admistrador_empresa'
+    variables = {
+        "titulo" : titulo_pantalla,
+        "regresar": regresar,
+        "form": form
+    }
+    if (request.method == "POST"):
+        form = cuenta(data=request.POST)
+        if form.is_valid():
+            datos = form.cleaned_data
+            monto = datos.get("monto")
+            tipo_cuenta = datos.get("tipo_cuenta")
+            tipo_moneda = datos.get("tipo_moneda")
+            id_usuario = datos.get("usuario")
+            host = 'localhost'
+            db_name = 'banca_virtual'
+            user = 'root'
+            contra = 'FloresB566+'
+            #puerto = 3306
+            #Conexion a base de datos sin uso de modulos
+            db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+            c = db.cursor()
+            consulta = "INSERT INTO Cuenta(monto, tipo_cuenta, tipo_moneda, id_usuario) VALUES('" + str(monto) + "', '" + tipo_cuenta + "', '" + tipo_moneda + "', '" + str(id_usuario) + "');"
+            c.execute(consulta)
+            db.commit()
+            c.close()
+            #form.save()
+            form = cuenta()
+            variables = {
+                "titulo" : titulo_pantalla,
+                "regresar": regresar,
+                "form": form
+            }
+        else:
+            variables = {
+                "titulo" : titulo_pantalla,
+                "regresar": regresar,
+                "form": form
+            }
+    return render(request, 'administrador/agregar.html', variables)

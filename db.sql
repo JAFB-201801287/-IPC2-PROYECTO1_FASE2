@@ -84,4 +84,10 @@ CREATE TABLE Cheque (
 
 SELECT * FROM Cliente;
 INSERT INTO Cliente(cui, nit, nombre, apellido, fecha_nacimiento) VALUES('3007153150101', '544554545454', 'Jose Andres', 'Flores Barco', '21/12/2020');
+SELECT * FROM Usuario;
+INSERT INTO Usuario(nombre, contrasena, cui) VALUES('', '', '');
+SELECT * FROM Empresa;
+INSERT INTO Empresa(nombre, nombre_comercial, nombre_representante) VALUES('', '', '');
+SELECT * FROM Cuenta;
+INSERT INTO Cuenta(monto, tipo_cuenta, tipo_moneda, id_usuario) VALUES('', '', '', '');
 
