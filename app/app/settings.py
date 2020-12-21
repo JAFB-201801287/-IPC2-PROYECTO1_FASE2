@@ -85,6 +85,17 @@ WSGI_APPLICATION = 'app.wsgi.application'
     #}
 #}
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'banca_virtual', # dbname
+        'USER': 'root', # master username
+        'PASSWORD': 'FloresB566+', # master password
+        'HOST': 'localhost', # Endpoint
+        'PORT': '3306',
+    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

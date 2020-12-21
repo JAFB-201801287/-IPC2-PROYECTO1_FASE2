@@ -87,3 +87,5 @@ CREATE TABLE Cheque (
     FOREIGN KEY (id_chequera) REFERENCES Cuenta(id_chequera)
 );
 
+SELECT * FROM Usuario;
+
