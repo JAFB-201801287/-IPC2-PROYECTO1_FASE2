@@ -6,7 +6,7 @@
         <form method="POST">
             {{ form.as_p }}
             {% csrf_token %}
-            <button type="submit">Registrar</button>
+            <button type="submit">{{ texto_boton }}</button>
         </form>
     </div>
     <a class="button" href="{% url regresar %}">REGRESAR</a>

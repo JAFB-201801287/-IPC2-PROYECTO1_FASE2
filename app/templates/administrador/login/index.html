@@ -10,20 +10,22 @@
     <body>
 
         {% block content %}
-            <form class="formulario">
+            <div class="formulario">
                 <div class="left">
+                    <div class="title_principal">
+                        <h2>SERVICIO DE BANCA EN LINEA</h2>
+                    </div>
                     <h1>INICIO DE SESION</h1>
                 
                     <p></p>
-                    <input class="text_box" type="text" size="40" placeholder="NOMBRE DE USUARIO">
-
-                    <p></p>
-                    <input class="text_box" type="password" size="40" placeholder="CONTRASEÑA">
-                
-                    <p></p>
-                    <input class="button" type="submit" value="ACEPTAR">
-                <div>
-            </form>
+                    <div class="formulario">
+                        <form method="POST">
+                            {{ form.as_p }}
+                            {% csrf_token %}
+                            <button type="submit">{{ texto_boton }}</button>
+                        </form>
+                    </div>
+            </div>
         {% endblock %}
     </body>
 </html>

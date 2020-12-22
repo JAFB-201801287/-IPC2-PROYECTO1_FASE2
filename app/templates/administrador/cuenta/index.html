@@ -17,7 +17,7 @@
                 <th><strong>USUARIO</strong></th>
             </tr>
             {% for id, monto, tipo_cuenta, tipo_moneda, id_usuario in lista %}
-                {% for id_user, nombre_usuario, contrasena, cui, id_empresa in usuarios %} 
+                {% for id_user, nombre_usuario, contrasena, intentos, cui, id_empresa in usuarios %} 
                     {% if  id_user == id_usuario%}
                     <td>{{ id }}</td>
                     {% if tipo_moneda == 'QUETZAL' %}

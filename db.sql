@@ -21,6 +21,7 @@ CREATE TABLE Usuario (
 	id_usuario INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
 	contrasena VARCHAR(25) NOT NULL,
+    intentos INT NOT NULL,
     cui BIGINT,
     id_empresa INT,
     FOREIGN KEY (cui) REFERENCES Cliente(cui),

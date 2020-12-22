@@ -2,6 +2,13 @@ from django import forms
 from .models import *
 from django.db.models import Q
 
+class inicio_sesion(forms.Form):
+    nombre_usuario = forms.CharField(required = True, max_length=20, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'NOMBRE DE USUARIO', 'class': 'text_box'}))
+    contrasena = forms.CharField(required = True, max_length=20, help_text='', label='', widget=forms.PasswordInput(attrs={'placeholder': 'CONTRASEÑA', 'class': 'text_box'}))
+
+    class Meta:
+        fields = ("nombre_usuario","contrasena")
+
 class cliente(forms.Form):
     nombre_usuario = forms.CharField(required = True, max_length=20, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'NOMBRE DE USUARIO'}))
     contrasena = forms.CharField(required = True, max_length=20, help_text='', label='', widget=forms.PasswordInput(attrs={'placeholder': 'CONTRASEÑA'}))
@@ -17,7 +24,7 @@ class cliente(forms.Form):
 
 class empresa(forms.Form):
     nombre_usuario = forms.CharField(required = True, max_length=20, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'NOMBRE DE USUARIO'}))
-    contrasena = forms.CharField(required = True, max_length=20, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'CONTRASEÑA'}))
+    contrasena = forms.CharField(required = True, max_length=20, help_text='', label='', widget=forms.PasswordInput(attrs={'placeholder': 'CONTRASEÑA'}))
     nombre = forms.CharField(required = True, max_length=100, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'NOMBRE DE EMPRESA'}))
     nombre_comercial = forms.CharField(required = True, max_length=100, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'NOMBRE COMERCIAL'}))
     nombre_representante = forms.CharField(required = True, max_length=150, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'NOMBRE DEL REPRESENTANTE'}))
@@ -27,30 +34,30 @@ class empresa(forms.Form):
         fields = ("nombre_usuario","contrasena", "nombre", "nombre_comercial", "nombre_representante")
 
 class cuenta(forms.Form):
-    monto = forms.IntegerField(required = True, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'MONTO'}))
+    monto = forms.FloatField(required = True, help_text='', label='', widget=forms.NumberInput(attrs={'placeholder': 'MONTO'}))
     TIPOS_CUENTA = [('', 'SELECCIONAR TIPO DE CUENTA'), ('MONETARIA', 'MONETARIA'), ('CUENTA DE AHORRO', 'CUENTA DE AHORRO'), ('CUENTA DE AHORRO A PLAZO FIJO', 'CUENTA DE AHORRO A PLAZO FIJO')]
     tipo_cuenta = forms.ChoiceField(required = True, help_text='', label='', choices=TIPOS_CUENTA)
     TIPOS_MONEDA = [('', 'SELECCIONAR TIPO DE MONEDA'), ('QUETZAL', 'QUETZAL'), ('DOLLAR', 'DOLLAR')]
     tipo_moneda = forms.ChoiceField(required = True, help_text='', label='', choices=TIPOS_MONEDA)
-    USUARIOS = [('', 'SELECCIONAR USUARIO')]
-    for user in Usuario.objects.all().values_list():
-        USUARIOS.append((user[0], user[1]))
-    usuario = forms.ChoiceField(required = True, help_text='', label='', choices=USUARIOS)
+    usuario = forms.ModelChoiceField(required = True, help_text='', label='', queryset=Usuario.objects.all(), empty_label="SELECCIONE UN USUARIO", to_field_name="id_usuario")
 
     class Meta:
-        fields = ("monto","tipo_cuenta", "tipo_cuenta", "usuario")
+        fields = ("monto","tipo_cuenta", "tipo_moneda", "usuario")
 
 class transaccion(forms.Form):
-    monto = forms.IntegerField(required = True, help_text='', label='', widget=forms.NumberInput(attrs={'placeholder': 'MONTO'}))
+    monto = forms.FloatField(required = True, help_text='', label='', widget=forms.NumberInput(attrs={'placeholder': 'MONTO'}))
     TIPOS_MONEDA = [('', 'SELECCIONAR TIPO DE MONEDA'), ('QUETZAL', 'QUETZAL'), ('DOLLAR', 'DOLLAR')]
     tipo_moneda = forms.ChoiceField(required = True, help_text='', label='', choices=TIPOS_MONEDA)
-    CUENTAS = [('', 'SELECCIONAR UNA NUMERO DE CUENTA')]
-    for user in Cuenta.objects.all().values_list():
-        CUENTAS.append((user[0], user[0]))
-    no_cuenta = forms.ChoiceField(required = True, help_text='', label='', choices=CUENTAS)
+    cuenta = forms.ModelChoiceField(required = True, help_text='', label='', queryset=Cuenta.objects.all(), empty_label="SELECCIONE NUMERO DE CUENTA", to_field_name="id_cuenta")
 
     class Meta:
-        fields = ("monto","tipo_cuenta", "tipo_cuenta", "usuario")
+        fields = ("monto", "tipo_moneda", "cuenta")
+
+class chequera(forms.Form):
+    no_cuenta = forms.ModelChoiceField(required = True, help_text='', label='', queryset=Cuenta.objects.all().filter(tipo_cuenta="MONETARIA"), empty_label="SELECCIONE NUMERO DE CUENTA", to_field_name="id_cuenta")
+
+    class Meta:
+        fields = ("no_cuenta")
 
 
 

@@ -218,6 +218,7 @@ class Usuario(models.Model):
     id_usuario = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50)
     contrasena = models.CharField(max_length=25)
+    intentos = models.IntegerField()
     cui = models.ForeignKey(Cliente, models.DO_NOTHING, db_column='cui', blank=True, null=True)
     id_empresa = models.ForeignKey(Empresa, models.DO_NOTHING, db_column='id_empresa', blank=True, null=True)
 
