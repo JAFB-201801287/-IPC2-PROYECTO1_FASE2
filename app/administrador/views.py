@@ -140,10 +140,26 @@ def agregar_empresa(request):
             }
     return render(request, 'administrador/agregar.html', variables)
 
+def lista_cuenta(request):
+    titulo_pantalla = "CLIENTES INDIVIDUALES"
+    a = Cuenta.objects.all().values_list()
+    u = Usuario.objects.all().values_list() # devuelve una lista
+    print(a)
+
+    if not a:
+        print("NO HAY CLIENTES")
+    variables = {
+        "titulo" : titulo_pantalla,
+        "lista": a,
+        "usuarios": u
+    }
+    return render(request, 'administrador/cuenta/index.html',variables)
+
 def agregar_cuenta(request):
+    print(Cuenta.objects.all().values_list())
     form = cuenta()
     titulo_pantalla = "ABRIR CUENTA PARA CLIENTE"
-    regresar = 'admistrador_empresa'
+    regresar = 'admistrador_cuenta'
     variables = {
         "titulo" : titulo_pantalla,
         "regresar": regresar,
