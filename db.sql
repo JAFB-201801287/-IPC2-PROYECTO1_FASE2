@@ -90,4 +90,8 @@ SELECT * FROM Empresa;
 INSERT INTO Empresa(nombre, nombre_comercial, nombre_representante) VALUES('', '', '');
 SELECT * FROM Cuenta;
 INSERT INTO Cuenta(monto, tipo_cuenta, tipo_moneda, id_usuario) VALUES('', '', '', '');
+UPDATE Cuenta SET monto = '' WHERE id_cuenta = '';
+SELECT * FROM Transaccion;
+INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('', '', '', '', '', '');
+
 

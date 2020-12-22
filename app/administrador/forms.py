@@ -4,12 +4,12 @@ from django.db.models import Q
 
 class cliente(forms.Form):
     nombre_usuario = forms.CharField(required = True, max_length=20, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'NOMBRE DE USUARIO'}))
-    contrasena = forms.CharField(required = True, max_length=20, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'CONTRASEÑA'}))
+    contrasena = forms.CharField(required = True, max_length=20, help_text='', label='', widget=forms.PasswordInput(attrs={'placeholder': 'CONTRASEÑA'}))
     cui = forms.IntegerField(required = True, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'CUI'}))
     nit = forms.IntegerField(required = True, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'NIT'}))
     nombre = forms.CharField(required = True, max_length=100, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'NOMBRE'}))
     apellido = forms.CharField(required = True, max_length=100, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'APELLIDO'}))
-    fecha_nacimiento = forms.CharField(required = True, help_text='', label='FECHA DE NACIMIENTO', widget=forms.SelectDateWidget(years=range(1950, 2021)))
+    fecha_nacimiento = forms.CharField(required = True, help_text='', label='FECHA DE NACIMIENTO', widget=forms.SelectDateWidget(years=range(1950, 2021), attrs={'class': 'date'}))
 
 
     class Meta:
@@ -36,6 +36,18 @@ class cuenta(forms.Form):
     for user in Usuario.objects.all().values_list():
         USUARIOS.append((user[0], user[1]))
     usuario = forms.ChoiceField(required = True, help_text='', label='', choices=USUARIOS)
+
+    class Meta:
+        fields = ("monto","tipo_cuenta", "tipo_cuenta", "usuario")
+
+class transaccion(forms.Form):
+    monto = forms.IntegerField(required = True, help_text='', label='', widget=forms.NumberInput(attrs={'placeholder': 'MONTO'}))
+    TIPOS_MONEDA = [('', 'SELECCIONAR TIPO DE MONEDA'), ('QUETZAL', 'QUETZAL'), ('DOLLAR', 'DOLLAR')]
+    tipo_moneda = forms.ChoiceField(required = True, help_text='', label='', choices=TIPOS_MONEDA)
+    CUENTAS = [('', 'SELECCIONAR UNA NUMERO DE CUENTA')]
+    for user in Cuenta.objects.all().values_list():
+        CUENTAS.append((user[0], user[0]))
+    no_cuenta = forms.ChoiceField(required = True, help_text='', label='', choices=CUENTAS)
 
     class Meta:
         fields = ("monto","tipo_cuenta", "tipo_cuenta", "usuario")

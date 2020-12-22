@@ -9,6 +9,7 @@ def login(request):
     return render(request, 'administrador/login/index.html')
 
 def lista_cliente(request):
+    #request.session['a'] = 'HOLA SESION'
     titulo_pantalla = "CLIENTES INDIVIDUALES"
     a = Cliente.objects.all().values_list()  # devuelve una lista
     print(a)
@@ -156,7 +157,6 @@ def lista_cuenta(request):
     return render(request, 'administrador/cuenta/index.html',variables)
 
 def agregar_cuenta(request):
-    print(Cuenta.objects.all().values_list())
     form = cuenta()
     titulo_pantalla = "ABRIR CUENTA PARA CLIENTE"
     regresar = 'admistrador_cuenta'
@@ -187,6 +187,68 @@ def agregar_cuenta(request):
             c.close()
             #form.save()
             form = cuenta()
+            variables = {
+                "titulo" : titulo_pantalla,
+                "regresar": regresar,
+                "form": form
+            }
+        else:
+            variables = {
+                "titulo" : titulo_pantalla,
+                "regresar": regresar,
+                "form": form
+            }
+    return render(request, 'administrador/agregar.html', variables)
+
+def deposito(request):
+    form = transaccion()
+    titulo_pantalla = "DEPOSITO DE MONETARIO EN CUENTA"
+    regresar = 'admistrador_cuenta'
+    variables = {
+        "titulo" : titulo_pantalla,
+        "regresar": regresar,
+        "form": form
+    }
+    if (request.method == "POST"):
+        form = transaccion(data=request.POST)
+        if form.is_valid():
+            datos = form.cleaned_data
+            monto = datos.get("monto")
+            tipo_moneda = datos.get("tipo_moneda")
+            no_cuenta = datos.get("no_cuenta")
+            cuenta = Cuenta.objects.get(id_cuenta=no_cuenta)
+
+            if(cuenta.tipo_moneda == tipo_moneda):
+                monto_anterior = cuenta.monto
+                monto_despues = (cuenta.monto + monto)
+            elif(cuenta.tipo_moneda == 'DOLLAR' and tipo_moneda == 'QUETZAL'):
+                monto_anterior = cuenta.monto
+                monto_despues = (cuenta.monto + (monto/7.87))
+            elif(cuenta.tipo_moneda == 'QUETZAL' and tipo_moneda == 'DOLLAR'):
+                monto_anterior = cuenta.monto
+                monto_despues = (cuenta.monto + (monto*7.60))
+
+            host = 'localhost'
+            db_name = 'banca_virtual'
+            user = 'root'
+            contra = 'FloresB566+'
+            #puerto = 3306
+            #Conexion a base de datos sin uso de modulos
+            db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+            c = db.cursor()
+            consulta = "INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('" + str(monto) + "', '" + str(monto_anterior) + "', '" + str(monto_despues) + "', '" + tipo_moneda + "', 'DEPOSITO', '" + str(no_cuenta) +"');"
+            c.execute(consulta)
+            db.commit()
+            c.close()
+
+            db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+            c = db.cursor()
+            consulta = "UPDATE Cuenta SET monto = '" + str(monto_despues) + "' WHERE id_cuenta = '" + str(no_cuenta) + "';"
+            c.execute(consulta)
+            db.commit()
+            c.close()
+            #form.save()
+            form = transaccion()
             variables = {
                 "titulo" : titulo_pantalla,
                 "regresar": regresar,

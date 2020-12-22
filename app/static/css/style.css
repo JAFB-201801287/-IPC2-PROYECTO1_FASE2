@@ -103,3 +103,28 @@ select {
     justify-content: center;
     align-items: center;
 }
+
+
+.date {
+    background: white;
+    border: none;
+    font-size: 14px;
+    height: 30px;
+    padding: 2px;
+    width: 150px;
+ }
+
+ .date:focus { 
+     outline: none;
+}
+
+button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }

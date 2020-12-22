@@ -26,4 +26,5 @@ urlpatterns = [
     path('administrador/empresa/agregar', views.agregar_empresa, name='admistrador_agregar_empresa'),
     path('administrador/cuenta/', views.lista_cuenta, name='admistrador_cuenta'),
     path('administrador/cuenta/agregar', views.agregar_cuenta, name='admistrador_agregar_cuenta'),
+    path('administrador/cuenta/deposito', views.deposito, name='admistrador_deposito_cuenta'),
 ]
