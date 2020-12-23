@@ -209,6 +209,7 @@ class Transaccion(models.Model):
     tipo_moneda = models.CharField(max_length=50)
     tipo_transaccion = models.CharField(max_length=50)
     id_cuenta = models.ForeignKey(Cuenta, models.DO_NOTHING, db_column='id_cuenta')
+    fecha = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False

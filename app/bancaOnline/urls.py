@@ -25,4 +25,6 @@ urlpatterns = [
     path('cliente/transaccion/deposito', views.deposito, name='cliente_deposito'),
     path('cliente/transaccion/activar', views.activar_cuenta, name='activar_cuenta'),
     path('cliente/transaccion/suspender', views.suspender_cuenta, name='suspender_cuenta'),
+    path('cliente/transaccion/propia', views.transferencia_propias, name='trasnferencias_propias'),
+    path('cliente/transaccion/terceros', views.transferencia_terceros, name='trasnferencias_terceros'),
 ]

@@ -46,6 +46,7 @@ CREATE TABLE Transaccion (
 	tipo_moneda VARCHAR(50) NOT NULL,
     tipo_transaccion VARCHAR(50) NOT NULL,
     id_cuenta INT NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_cuenta) REFERENCES Cuenta(id_cuenta)
 );
 
@@ -96,5 +97,9 @@ INSERT INTO Cuenta(monto, tipo_cuenta, tipo_moneda, id_usuario) VALUES('', '', '
 UPDATE Cuenta SET monto = '' WHERE id_cuenta = '';
 SELECT * FROM Transaccion;
 INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('', '', '', '', '', '');
-
+SELECT * FROM Chequera;
+INSERT INTO Transaccion(acabada, id_cuenta) VALUES('', '');
+DELETE FROM Chequera WHERE id_chequera = '3';
+SELECT * FROM Cheque;
+INSERT INTO Cheque(monto, autorizado, disponible, id_chequera) VALUES('0', 'NO', 'SI', '');
 

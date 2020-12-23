@@ -8,18 +8,8 @@
             {% csrf_token %}
             <button type="submit">{{ texto_boton }}</button>
         </form>
+        <p></p>
+        <p>{{ mensaje }}</p>
     </div>
     <a class="button" href="{% url regresar %}">REGRESAR</a>
 {% endblock %}
-
-{% comment '' %}
-            <select name="cuenta" required="" id="id_cuenta">
-                <option value="" selected="">SELECCIONE NO. CUENTA</option>
-                {% for cuenta in cuentas %}
-                    {% if cuenta.id_usuario.id_usuario ==  request.session.user %}
-                        <option value="cuenta.id_cuenta">{{ cuenta.id_cuenta }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-            <p></p>
-{% endcomment %}

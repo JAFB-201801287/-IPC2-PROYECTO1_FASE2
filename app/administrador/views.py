@@ -5,6 +5,7 @@ from django.db.models import Q
 
 # Create your views here.
 
+#-------------------------------------------------------------------------------------------------------------
 def login(request):
     form = inicio_sesion()
     texto_boton = "INICIAR SESION"
@@ -35,11 +36,10 @@ def login(request):
             }
     return render(request, 'administrador/login/index.html', variables)
 
+#-------------------------------------------------------------------------------------------------------------
 def lista_cliente(request):
-    #request.session['a'] = 'HOLA SESION'
     titulo_pantalla = "CLIENTES INDIVIDUALES"
     a = Cliente.objects.all().values_list()  # devuelve una lista
-    print(a)
 
     if not a:
         print("NO HAY CLIENTES")
@@ -49,16 +49,20 @@ def lista_cliente(request):
     }
     return render(request, 'administrador/cliente/index.html',variables)
 
+# AGREGAR CLIENTE
+#-------------------------------------------------------------------------------------------------------------
 def agregar_cliente(request):
     form = cliente()
     titulo_pantalla = "AGREGAR NUEVO CLIENTE INDIVIDUAL"
     texto_boton = "ACEPTAR"
     regresar = 'admistrador_cliente'
+    mensaje_error = ""
     variables = {
         "titulo" : titulo_pantalla,
         "texto_boton": texto_boton,
         "regresar": regresar,
-        "form": form
+        "form": form,
+        "mensaje_error": mensaje_error
     }
     if (request.method == "POST"):
         form = cliente(data=request.POST)
@@ -95,22 +99,27 @@ def agregar_cliente(request):
             c.close()
             #form.save()
             form = cliente()
+            mensaje_error = "SE CREO EL CLIENTE INDIVIDUAL"
             variables = {
                 "titulo" : titulo_pantalla,
                 "texto_boton": texto_boton,
                 "regresar": regresar,
-                "form": form
+                "form": form,
+                "mensaje_error": mensaje_error
             }
         else:
             nombre= "INFORMACION INVALIDA"
+            mensaje_error = "ERROR NO SE PUDO HACER LA CONSULTA"
             variables = {
                 "titulo" : titulo_pantalla,
                 "texto_boton": texto_boton,
                 "regresar": regresar,
-                "form": form
+                "form": form,
+                "mensaje_error": mensaje_error
             }
     return render(request, 'administrador/formulario.html', variables)
 
+#-------------------------------------------------------------------------------------------------------------
 def lista_empresa(request):
     titulo_pantalla = "CLIENTES EMPRESARIALES"
     a = Empresa.objects.all().values_list()  # devuelve una lista
@@ -123,16 +132,20 @@ def lista_empresa(request):
     }
     return render(request, 'administrador/empresa/index.html',variables)
 
+# AGREGAR EMPRESA
+#-------------------------------------------------------------------------------------------------------------
 def agregar_empresa(request):
     form = empresa()
     titulo_pantalla = "AGREGAR NUEVO CLIENTE EMPRESARIAL"
     texto_boton = "ACEPTAR"
     regresar = 'admistrador_empresa'
+    mensaje_error = ""
     variables = {
         "titulo" : titulo_pantalla,
         "texto_boton": texto_boton,
         "regresar": regresar,
-        "form": form
+        "form": form,
+        "mensaje_error": mensaje_error
     }
     if (request.method == "POST"):
         form = empresa(data=request.POST)
@@ -164,24 +177,28 @@ def agregar_empresa(request):
             c.close()
             #form.save()
             form = empresa()
+            mensaje_error = "SE CREO EL CLIENTE EMPRESARIAL"
             variables = {
                 "titulo" : titulo_pantalla,
                 "texto_boton": texto_boton,
                 "regresar": regresar,
-                "form": form
+                "form": form,
+                "mensaje_error": mensaje_error
             }
         else:
-            nombre= "INFORMACION INVALIDA"
+            mensaje_error = "ERROR NO SE PUDO HACER LA CONSULTA"
             variables = {
                 "titulo" : titulo_pantalla,
                 "texto_boton": texto_boton,
                 "regresar": regresar,
-                "form": form
+                "form": form,
+                "mensaje_error": mensaje_error
             }
     return render(request, 'administrador/formulario.html', variables)
 
+#-------------------------------------------------------------------------------------------------------------
 def lista_cuenta(request):
-    titulo_pantalla = "CLIENTES INDIVIDUALES"
+    titulo_pantalla = "CUENTAS"
     a = Cuenta.objects.all().select_related('id_usuario').order_by('id_cuenta') # devuelve una lista
     print(a)
 
@@ -193,16 +210,20 @@ def lista_cuenta(request):
     }
     return render(request, 'administrador/cuenta/index.html',variables)
 
+# AGREGAR CUENTA
+#-------------------------------------------------------------------------------------------------------------
 def agregar_cuenta(request):
     form = cuenta()
     titulo_pantalla = "ABRIR CUENTA PARA CLIENTE"
     texto_boton = "ACEPTAR"
     regresar = 'admistrador_cuenta'
+    mensaje_error = ""
     variables = {
         "titulo" : titulo_pantalla,
         "texto_boton": texto_boton,
         "regresar": regresar,
-        "form": form
+        "form": form,
+        "mensaje_error": mensaje_error
     }
     if (request.method == "POST"):
         form = cuenta(data=request.POST)
@@ -226,31 +247,39 @@ def agregar_cuenta(request):
             c.close()
             #form.save()
             form = cuenta()
+            mensaje_error = "SE CREO LA CUENTA"
             variables = {
                 "titulo" : titulo_pantalla,
                 "texto_boton": texto_boton,
                 "regresar": regresar,
-                "form": form
+                "form": form,
+                "mensaje_error": mensaje_error
             }
         else:
+            mensaje_error = "ERROR NO SE PUDO HACER LA CONSULTA"
             variables = {
                 "titulo" : titulo_pantalla,
                 "texto_boton": texto_boton,
                 "regresar": regresar,
-                "form": form
+                "form": form,
+                "mensaje_error": mensaje_error
+                
             }
     return render(request, 'administrador/formulario.html', variables)
 
+#-------------------------------------------------------------------------------------------------------------
 def deposito(request):
     form = transaccion()
     titulo_pantalla = "DEPOSITO DE MONETARIO EN CUENTA"
     texto_boton = "ACEPTAR"
     regresar = 'admistrador_cuenta'
+    mensaje_error = ""
     variables = {
         "titulo" : titulo_pantalla,
         "texto_boton": texto_boton,
         "regresar": regresar,
-        "form": form
+        "form": form,
+        "mensaje_error": mensaje_error
     }
     if (request.method == "POST"):
         form = transaccion(data=request.POST)
@@ -291,67 +320,98 @@ def deposito(request):
             c.close()
             #form.save()
             form = transaccion()
+            mensaje_error = "EL DEPOSITO SE EFECTUO CON EXITO"
             variables = {
                 "titulo" : titulo_pantalla,
                 "texto_boton": texto_boton,
                 "regresar": regresar,
-                "form": form
+                "form": form,
+                "mensaje_error": mensaje_error
             }
         else:
+            mensaje_error = "ERROR NO SE PUDO HACER EL DEPOSITO"
             variables = {
                 "titulo" : titulo_pantalla,
                 "texto_boton": texto_boton,
                 "regresar": regresar,
-                "form": form
+                "form": form,
+                "mensaje_error": mensaje_error
             }
     return render(request, 'administrador/formulario.html', variables)
 
+#-------------------------------------------------------------------------------------------------------------
 def agregar_chequera(request):
     form = chequera()
     titulo_pantalla = "CREACION DE CHEQUERA"
     texto_boton = "ACEPTAR"
     regresar = 'admistrador_cuenta'
+    mensaje_error = ""
+    mensaje_error = ""
     variables = {
         "titulo" : titulo_pantalla,
         "texto_boton": texto_boton,
         "regresar": regresar,
-        "form": form
+        "form": form,
+        "mensaje_error": mensaje_error
     }
     if (request.method == "POST"):
         form = chequera(data=request.POST)
         if form.is_valid():
             datos = form.cleaned_data
-            no_cuenta = datos.get("no_cuenta")
-            cuenta = Cuenta.objects.get(id_cuenta=no_cuenta)
+            cuenta = datos.get("cuenta")
             host = 'localhost'
             db_name = 'banca_virtual'
             user = 'root'
             contra = 'FloresB566+'
             #puerto = 3306
             #Conexion a base de datos sin uso de modulos
-            db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
-            c = db.cursor()
-            consulta = "" #"INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('" + str(monto) + "', '" + str(monto_anterior) + "', '" + str(monto_despues) + "', '" + tipo_moneda + "', 'DEPOSITO', '" + str(no_cuenta) +"');"
-            c.execute(consulta)
-            db.commit()
-            c.close()
-            #form.save()
-            form = transaccion()
+
+            flag = True
+            for che in Chequera.objects.all().filter(id_cuenta=cuenta.id_cuenta):
+                if(che.acabada == "EN USO"):
+                    flag = False
+
+            if(flag):
+                db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+                c = db.cursor()
+                consulta = "INSERT INTO Chequera(acabada, id_cuenta) VALUES('EN USO', '" + str(cuenta.id_cuenta) + "');"
+                c.execute(consulta)
+                db.commit()
+                c.close()
+
+                temp = Chequera.objects.last()
+
+                for i in range(20):
+                    db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+                    c = db.cursor()
+                    consulta = "INSERT INTO Cheque(monto, autorizado, disponible, id_chequera) VALUES('0', 'NO', 'SI', '" + str(temp.id_chequera) + "');"
+                    c.execute(consulta)
+                    db.commit()
+                    c.close()
+                mensaje_error = f"SE CREO LA CHEQUERA CODIGO { str(temp.id_chequera) } CON 20 CHEQUES"
+            else:
+                mensaje_error = "ERROR CHEQUERA EN USO"
+            
+            form = chequera()
             variables = {
                 "titulo" : titulo_pantalla,
                 "texto_boton": texto_boton,
                 "regresar": regresar,
-                "form": form
+                "form": form,
+                "mensaje_error": mensaje_error
             }
         else:
+            mensaje_error = "ERROR NO SE PUDO HACER LA CONSULTA"
             variables = {
                 "titulo" : titulo_pantalla,
                 "texto_boton": texto_boton,
                 "regresar": regresar,
-                "form": form
+                "form": form,
+                "mensaje_error": mensaje_error
             }
     return render(request, 'administrador/formulario.html', variables)
 
+#-------------------------------------------------------------------------------------------------------------
 def lista_usuarios(request):
     titulo_pantalla = "USUARIOS"
     usuarios = Usuario.objects.all()  # devuelve una lista
@@ -364,19 +424,22 @@ def lista_usuarios(request):
     }
     return render(request, 'administrador/usuario/index.html',variables)
 
+#-------------------------------------------------------------------------------------------------------------
 def activar_usuario(request):
     form = usuario()
     form.fields['usuario'].queryset = Usuario.objects.all().filter(intentos__gte=3)
 
     titulo_pantalla = "ACTIVAR USUARIO"
     texto_boton = "ACEPTAR"
-    regresar = 'admistrador_cuenta'
+    regresar = 'admistrador_usuario'
+    mensaje_error = ""
 
     variables = {
         "titulo" : titulo_pantalla,
         "texto_boton": texto_boton,
         "regresar": regresar,
-        "form": form
+        "form": form,
+        "mensaje_error": mensaje_error
     }
 
     if (request.method == "POST"):
@@ -402,18 +465,22 @@ def activar_usuario(request):
 
             form = usuario()
             form.fields['usuario'].queryset = Usuario.objects.all().filter(intentos__gte=3)
+            mensaje_error = "SE ACTIVO CON EXITO LA CUENTA"
             variables = {
                 "titulo" : titulo_pantalla,
                 "texto_boton": texto_boton,
                 "regresar": regresar,
-                "form": form
+                "form": form,
+                "mensaje_error": mensaje_error
             }
         else:
             form.fields['usuario'].queryset = Usuario.objects.all().filter(intentos__gte=3)
+            mensaje_error = "ERROR NO SE PUDO HACER LA CONSULTA"
             variables = {
                 "titulo" : titulo_pantalla,
                 "texto_boton": texto_boton,
                 "regresar": regresar,
-                "form": form
+                "form": form,
+                "mensaje_error": mensaje_error
             }
-    return render(request, 'cliente/formulario/index.html', variables)
+    return render(request, 'administrador/formulario.html', variables)

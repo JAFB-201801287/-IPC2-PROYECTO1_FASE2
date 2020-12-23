@@ -54,10 +54,10 @@ class transaccion(forms.Form):
         fields = ("monto", "tipo_moneda", "cuenta")
 
 class chequera(forms.Form):
-    no_cuenta = forms.ModelChoiceField(required = True, help_text='', label='', queryset=Cuenta.objects.all().filter(tipo_cuenta="MONETARIA"), empty_label="SELECCIONE NUMERO DE CUENTA", to_field_name="id_cuenta")
+    cuenta = forms.ModelChoiceField(required = True, help_text='', label='', queryset=Cuenta.objects.all().filter(tipo_cuenta="MONETARIA").filter(estado='ACTIVA'), empty_label="SELECCIONE NUMERO DE CUENTA", to_field_name="id_cuenta")
 
     class Meta:
-        fields = ("no_cuenta")
+        fields = ("cuenta")
 
 class usuario(forms.Form):
     usuario = forms.ModelChoiceField(required = True, help_text='', label='', queryset=Usuario.objects.all(), empty_label="SELECCIONE UN USUARIO", to_field_name="id_usuario")

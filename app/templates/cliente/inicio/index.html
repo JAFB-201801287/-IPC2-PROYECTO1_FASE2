@@ -25,8 +25,8 @@
         <a class="button" href="{% url 'cliente_deposito' %}">DEPOSITAR</a>
         <a class="button" href="{% url 'activar_cuenta' %}">ACTIVAR CUENTA</a>
         <a class="button" href="{% url 'suspender_cuenta' %}">SUSPENDER CUENTA</a>
-        <a class="button" href="{% url 'cliente_deposito' %}">TRANSACCIONES ENTRE CUENTAS PROPIAS</a>
-        <a class="button" href="{% url 'cliente_deposito' %}">DEPOSITAR ENTRE CUENTES DE TERCEROS</a>
+        <a class="button" href="{% url 'trasnferencias_propias' %}">TRANSACCIONES ENTRE CUENTAS PROPIAS</a>
+        <a class="button" href="{% url 'trasnferencias_terceros' %}">DEPOSITAR ENTRE CUENTES DE TERCEROS</a>
         <p></p>
         <br/>
 
@@ -67,6 +67,7 @@
                 <th><strong>MONTO DESPUES</strong></th>
                 <th><strong>MONEDA UTILIZADA</strong></th>
                 <th><strong>TRANSACCION</strong></th>
+                <th><strong>FECHA</strong></th>
             </tr>
             {% for transaccion in transacciones %}
                 {% if transaccion.id_cuenta.id_usuario.id_usuario ==  request.session.user %}
@@ -86,6 +87,7 @@
                         {% endif %}
                         <td>{{ transaccion.tipo_moneda }}</td>
                         <td>{{ transaccion.tipo_transaccion }}</td>
+                        <td>{{ transaccion.fecha }}</td>
                     </tr>
                 {% endif %}
             {% endfor %}

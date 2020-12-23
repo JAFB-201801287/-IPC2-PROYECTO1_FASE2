@@ -24,3 +24,19 @@ class estado(forms.Form):
 
     class Meta:
         fields = ("cuenta")
+
+class cuentas_propias(forms.Form):
+    monto = forms.FloatField(required = True, help_text='', label='', widget=forms.NumberInput(attrs={'placeholder': 'MONTO'}))
+    cuenta1 = forms.ModelChoiceField(required = True, help_text='', label='', queryset=Cuenta.objects.all(), empty_label="SELECCIONE NUMERO DE CUENTA PARA TRASFERIR", to_field_name="id_cuenta")
+    cuenta2 = forms.ModelChoiceField(required = True, help_text='', label='', queryset=Cuenta.objects.all(), empty_label="SELECCIONE NUMERO DE CUENTA PARA DEPOSITAR", to_field_name="id_cuenta")
+
+    class Meta:
+        fields = ("monto", "tipo_moneda", "cuenta1" , "cuenta2")
+
+class cuentas_terceros(forms.Form):
+    monto = forms.FloatField(required = True, help_text='', label='', widget=forms.NumberInput(attrs={'placeholder': 'MONTO'}))
+    cuenta1 = forms.ModelChoiceField(required = True, help_text='', label='', queryset=Cuenta.objects.all(), empty_label="SELECCIONE NUMERO DE CUENTA PARA TRASFERIR", to_field_name="id_cuenta")
+    no_cuenta = forms.IntegerField(required = True, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'NUMERO DE CUENTA PARA DEPOSITAR'}))
+
+    class Meta:
+        fields = ("monto", "tipo_moneda", "cuenta1" , "no_cuenta")

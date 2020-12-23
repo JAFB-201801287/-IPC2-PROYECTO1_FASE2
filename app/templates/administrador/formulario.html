@@ -8,6 +8,8 @@
             {% csrf_token %}
             <button type="submit">{{ texto_boton }}</button>
         </form>
+        <p></p>
+        <p>{{mensaje_error}}</p>
     </div>
     <a class="button" href="{% url regresar %}">REGRESAR</a>
 {% endblock %}

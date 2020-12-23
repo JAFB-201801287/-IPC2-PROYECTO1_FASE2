@@ -28,7 +28,7 @@ def login(request):
 
             try:
                 user = Usuario.objects.get(nombre = nombre_usuario)
-                if(user.contrasena == contrasena):
+                if(user.contrasena == contrasena and user.intentos < 3):
                     request.session["user"] = user.id_usuario
                     return redirect('/cliente/inicio/')
                 else: 
@@ -274,5 +274,219 @@ def suspender_cuenta(request):
                 "texto_boton": texto_boton,
                 "regresar": regresar,
                 "form": form
+            }
+    return render(request, 'cliente/formulario/index.html', variables)
+
+def transferencia_propias(request):
+    id_usuario = request.session['user']
+
+    form = cuentas_propias()
+    form.fields['cuenta1'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA')
+    form.fields['cuenta2'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA')
+
+    titulo_pantalla = "TRANSACCIONES ENTRE CUENTAS PROPIAS"
+    texto_boton = "ACEPTAR"
+    regresar = 'cliente_inicio'
+    mensaje = ''
+
+    variables = {
+        "titulo" : titulo_pantalla,
+        "texto_boton": texto_boton,
+        "regresar": regresar,
+        "form": form,
+        "mensaje": mensaje
+    }
+
+    if (request.method == "POST"):
+        form = cuentas_propias(data=request.POST)
+        if form.is_valid():
+            datos = form.cleaned_data
+            monto = datos.get("monto")
+            cuenta1 = datos.get("cuenta1")
+            cuenta2 = datos.get("cuenta2")
+            if(cuenta1.id_cuenta != cuenta2.id_cuenta):
+                if(cuenta1.tipo_moneda == cuenta2.tipo_moneda):
+                    monto1_anterior = cuenta1.monto
+                    monto1_despues = (cuenta1.monto - monto)
+                    monto2_anterior = cuenta2.monto
+                    monto2_despues = (cuenta2.monto + monto)
+                elif(cuenta1.tipo_moneda == 'DOLLAR' and cuenta2.tipo_moneda == 'QUETZAL'):
+                    monto1_anterior = cuenta1.monto
+                    monto1_despues = (cuenta1.monto - (monto/7.87))
+                    monto2_anterior = cuenta2.monto
+                    monto2_despues = (cuenta2.monto + (monto/7.87))
+                elif(cuenta1.tipo_moneda == 'QUETZAL' and cuenta2.tipo_moneda == 'DOLLAR'):
+                    monto1_anterior = cuenta1.monto
+                    monto1_despues = (cuenta1.monto - (monto*7.60))
+                    monto2_anterior = cuenta2.monto
+                    monto2_despues = (cuenta2.monto + (monto*7.60))
+
+                host = 'localhost'
+                db_name = 'banca_virtual'
+                user = 'root'
+                contra = 'FloresB566+'
+                #puerto = 3306
+                #Conexion a base de datos sin uso de modulos
+
+                db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+                c = db.cursor()
+                consulta = "INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('" + str(monto) + "', '" + str(monto1_anterior) + "', '" + str(monto1_despues) + "', '" + cuenta1.tipo_moneda + "', 'TRANSFERENCIA A CUENTA', '" + str(cuenta1.id_cuenta) +"');"
+                c.execute(consulta)
+                db.commit()
+                c.close()
+
+                db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+                c = db.cursor()
+                consulta = "UPDATE Cuenta SET monto = '" + str(monto1_despues) + "' WHERE id_cuenta = '" + str(cuenta1.id_cuenta) + "';"
+                c.execute(consulta)
+                db.commit()
+                c.close()
+
+                db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+                c = db.cursor()
+                consulta = "INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('" + str(monto) + "', '" + str(monto2_anterior) + "', '" + str(monto2_despues) + "', '" + cuenta1.tipo_moneda + "', 'TRANSFERENCIA A CUENTA', '" + str(cuenta2.id_cuenta) +"');"
+                c.execute(consulta)
+                db.commit()
+                c.close()
+
+                db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+                c = db.cursor()
+                consulta = "UPDATE Cuenta SET monto = '" + str(monto2_despues) + "' WHERE id_cuenta = '" + str(cuenta2.id_cuenta) + "';"
+                c.execute(consulta)
+                db.commit()
+                c.close()
+                #form.save()
+                mensaje = "SE LOGRO HACER EL TRASPASO MONETARIO ENTRE CUENTAS"
+            else:
+                mensaje = "ERROR A ESCOGIDO LA MISMA CUENTA PARA HACER LA TRANSACCION"
+
+            form = cuentas_propias()
+            form.fields['cuenta1'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA')
+            form.fields['cuenta2'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA')
+            variables = {
+                "titulo" : titulo_pantalla,
+                "texto_boton": texto_boton,
+                "regresar": regresar,
+                "form": form,
+                "mensaje": mensaje
+            }
+        else:
+            form.fields['cuenta1'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA')
+            form.fields['cuenta2'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA')
+            mensaje_error = "ERROR NO SE PUDO HACER LA CONSULTA"
+            variables = {
+                "titulo" : titulo_pantalla,
+                "texto_boton": texto_boton,
+                "regresar": regresar,
+                "form": form,
+                "mensaje": mensaje
+            }
+    return render(request, 'cliente/formulario/index.html', variables)
+
+def transferencia_terceros(request):
+    id_usuario = request.session['user']
+
+    form = cuentas_terceros()
+    form.fields['cuenta1'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA')
+
+    titulo_pantalla = "TRANSACCIONES ENTRE CUENTAS PROPIAS"
+    texto_boton = "ACEPTAR"
+    regresar = 'cliente_inicio'
+    mensaje = ''
+
+    variables = {
+        "titulo" : titulo_pantalla,
+        "texto_boton": texto_boton,
+        "regresar": regresar,
+        "form": form,
+        "mensaje": mensaje
+    }
+
+    if (request.method == "POST"):
+        form = cuentas_terceros(data=request.POST)
+        if form.is_valid():
+            datos = form.cleaned_data
+            monto = datos.get("monto")
+            cuenta1 = datos.get("cuenta1")
+            no_cuenta = datos.get("no_cuenta")
+
+            try:
+                cuenta2 = Cuenta.objects.get(id_cuenta = no_cuenta)
+                if(cuenta1.id_cuenta != cuenta2.id_cuenta):
+                    if(cuenta1.tipo_moneda == cuenta2.tipo_moneda):
+                        monto1_anterior = cuenta1.monto
+                        monto1_despues = (cuenta1.monto - monto)
+                        monto2_anterior = cuenta2.monto
+                        monto2_despues = (cuenta2.monto + monto)
+                    elif(cuenta1.tipo_moneda == 'DOLLAR' and cuenta2.tipo_moneda == 'QUETZAL'):
+                        monto1_anterior = cuenta1.monto
+                        monto1_despues = (cuenta1.monto - (monto/7.87))
+                        monto2_anterior = cuenta2.monto
+                        monto2_despues = (cuenta2.monto + (monto/7.87))
+                    elif(cuenta1.tipo_moneda == 'QUETZAL' and cuenta2.tipo_moneda == 'DOLLAR'):
+                        monto1_anterior = cuenta1.monto
+                        monto1_despues = (cuenta1.monto - (monto*7.60))
+                        monto2_anterior = cuenta2.monto
+                        monto2_despues = (cuenta2.monto + (monto*7.60))
+
+                    host = 'localhost'
+                    db_name = 'banca_virtual'
+                    user = 'root'
+                    contra = 'FloresB566+'
+                    #puerto = 3306
+                    #Conexion a base de datos sin uso de modulos
+
+                    db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+                    c = db.cursor()
+                    consulta = "INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('" + str(monto) + "', '" + str(monto1_anterior) + "', '" + str(monto1_despues) + "', '" + cuenta1.tipo_moneda + "', 'TRANSFERENCIA A CUENTA', '" + str(cuenta1.id_cuenta) +"');"
+                    c.execute(consulta)
+                    db.commit()
+                    c.close()
+
+                    db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+                    c = db.cursor()
+                    consulta = "UPDATE Cuenta SET monto = '" + str(monto1_despues) + "' WHERE id_cuenta = '" + str(cuenta1.id_cuenta) + "';"
+                    c.execute(consulta)
+                    db.commit()
+                    c.close()
+
+                    db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+                    c = db.cursor()
+                    consulta = "INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('" + str(monto) + "', '" + str(monto2_anterior) + "', '" + str(monto2_despues) + "', '" + cuenta1.tipo_moneda + "', 'TRANSFERENCIA A CUENTA', '" + str(cuenta2.id_cuenta) +"');"
+                    c.execute(consulta)
+                    db.commit()
+                    c.close()
+
+                    db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+                    c = db.cursor()
+                    consulta = "UPDATE Cuenta SET monto = '" + str(monto2_despues) + "' WHERE id_cuenta = '" + str(cuenta2.id_cuenta) + "';"
+                    c.execute(consulta)
+                    db.commit()
+                    c.close()
+                    #form.save()
+                    mensaje = "SE LOGRO HACER EL TRASPASO MONETARIO ENTRE CUENTAS"
+                else:
+                    mensaje = "ERROR A ESCOGIDO LA MISMA CUENTA PARA HACER LA TRANSACCION"
+            except ObjectDoesNotExist:
+                mensaje = "ERROR NO EXISTE EL NUMERO DE CUENTA"
+
+            form = cuentas_terceros()
+            form.fields['cuenta1'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA')
+            variables = {
+                "titulo" : titulo_pantalla,
+                "texto_boton": texto_boton,
+                "regresar": regresar,
+                "form": form,
+                "mensaje": mensaje
+            }
+        else:
+            form.fields['cuenta1'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA')
+            mensaje = "ERROR NO SE PUDO HACER LA CONSULTA"
+            variables = {
+                "titulo" : titulo_pantalla,
+                "texto_boton": texto_boton,
+                "regresar": regresar,
+                "form": form,
+                "mensaje": mensaje
             }
     return render(request, 'cliente/formulario/index.html', variables)
