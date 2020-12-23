@@ -15,23 +15,20 @@
                 <th><strong>TIPO DE CUENTA</strong></th>
                 <th><strong>TIPO DE MONEDA MANEJADA</strong></th>
                 <th><strong>USUARIO</strong></th>
+                <th><strong>ESTADO</strong></th>
             </tr>
-            {% for id, monto, tipo_cuenta, tipo_moneda, id_usuario in lista %}
-                {% for id_user, nombre_usuario, contrasena, intentos, cui, id_empresa in usuarios %} 
-                    {% if  id_user == id_usuario%}
-                    <td>{{ id }}</td>
-                    {% if tipo_moneda == 'QUETZAL' %}
-                        <td>Q {{ monto }}</td>
-                    {% elif tipo_moneda == 'DOLLAR' %}
-                        <td>$ {{ monto }}</td>
-                    {% endif %}
-                    <td>{{ tipo_cuenta }}</td>
-                    <td>{{ tipo_moneda }}</td>
-                    <td>{{ nombre_usuario }}</td>
-                    {% endif %}
-                {% endfor %}
+            {% for cuenta in lista %}
                 <tr>
-
+                    <td>{{ cuenta.id_cuenta }}</td>
+                    {% if cuenta.tipo_moneda == 'QUETZAL' %}
+                        <td>Q {{ cuenta.monto }}</td>
+                    {% elif cuenta.tipo_moneda == 'DOLLAR' %}
+                        <td>$ {{ cuenta.monto }}</td>
+                    {% endif %}
+                    <td>{{ cuenta.tipo_cuenta }}</td>
+                    <td>{{ cuenta.tipo_moneda }}</td>
+                    <td>{{ cuenta.id_usuario.nombre }}</td>
+                    <td>{{ cuenta.estado }}</td>
                 </tr>
             {% endfor %}
 

@@ -114,6 +114,7 @@ class Cuenta(models.Model):
     tipo_cuenta = models.CharField(max_length=50)
     tipo_moneda = models.CharField(max_length=50)
     id_usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='id_usuario')
+    estado = models.CharField(max_length=20)
 
     def __str__(self):
         return u'{0}'.format(self.id_cuenta)

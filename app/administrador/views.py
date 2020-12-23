@@ -182,16 +182,14 @@ def agregar_empresa(request):
 
 def lista_cuenta(request):
     titulo_pantalla = "CLIENTES INDIVIDUALES"
-    a = Cuenta.objects.all().values_list()
-    u = Usuario.objects.all().values_list() # devuelve una lista
+    a = Cuenta.objects.all().select_related('id_usuario').order_by('id_cuenta') # devuelve una lista
     print(a)
 
     if not a:
         print("NO HAY CLIENTES")
     variables = {
         "titulo" : titulo_pantalla,
-        "lista": a,
-        "usuarios": u
+        "lista": a
     }
     return render(request, 'administrador/cuenta/index.html',variables)
 
@@ -222,7 +220,7 @@ def agregar_cuenta(request):
             #Conexion a base de datos sin uso de modulos
             db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
             c = db.cursor()
-            consulta = "INSERT INTO Cuenta(monto, tipo_cuenta, tipo_moneda, id_usuario) VALUES('" + str(monto) + "', '" + tipo_cuenta + "', '" + tipo_moneda + "', '" + str(usuario.id_usuario) + "');"
+            consulta = "INSERT INTO Cuenta(monto, tipo_cuenta, tipo_moneda, id_usuario, estado) VALUES('" + str(monto) + "', '" + tipo_cuenta + "', '" + tipo_moneda + "', '" + str(usuario.id_usuario) + "', 'ACTIVA');"
             c.execute(consulta)
             db.commit()
             c.close()
@@ -353,3 +351,57 @@ def agregar_chequera(request):
                 "form": form
             }
     return render(request, 'administrador/formulario.html', variables)
+
+def activar_usuario(request):
+    form = usuario()
+    form.fields['usuario'].queryset = Usuario.objects.all().filter(intentos__gte=3)
+
+    titulo_pantalla = "ACTIVAR USUARIO"
+    texto_boton = "ACEPTAR"
+    regresar = 'admistrador_cuenta'
+
+    variables = {
+        "titulo" : titulo_pantalla,
+        "texto_boton": texto_boton,
+        "regresar": regresar,
+        "form": form
+    }
+
+    if (request.method == "POST"):
+        form = usuario(data=request.POST)
+        if form.is_valid():
+            datos = form.cleaned_data
+            usu = datos.get("usuario")
+
+            host = 'localhost'
+            db_name = 'banca_virtual'
+            user = 'root'
+            contra = 'FloresB566+'
+            #puerto = 3306
+            #Conexion a base de datos sin uso de modulos
+
+            db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+            c = db.cursor()
+            consulta = "UPDATE Usuario SET intentos = '0' WHERE id_usuario = '" + str(usu.id_usuario) + "';"
+            c.execute(consulta)
+            db.commit()
+            c.close()
+            #form.save()
+
+            form = usuario()
+            form.fields['usuario'].queryset = Usuario.objects.all().filter(intentos__gte=3)
+            variables = {
+                "titulo" : titulo_pantalla,
+                "texto_boton": texto_boton,
+                "regresar": regresar,
+                "form": form
+            }
+        else:
+            form.fields['usuario'].queryset = Usuario.objects.all().filter(intentos__gte=3)
+            variables = {
+                "titulo" : titulo_pantalla,
+                "texto_boton": texto_boton,
+                "regresar": regresar,
+                "form": form
+            }
+    return render(request, 'cliente/formulario/index.html', variables)

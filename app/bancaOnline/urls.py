@@ -21,4 +21,8 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('', views.index, name='home'),
     path('cliente/login/', views.login, name='cliente_login'),
+    path('cliente/inicio/', views.inicio, name='cliente_inicio'),
+    path('cliente/transaccion/deposito', views.deposito, name='cliente_deposito'),
+    path('cliente/transaccion/activar', views.activar_cuenta, name='activar_cuenta'),
+    path('cliente/transaccion/suspender', views.suspender_cuenta, name='suspender_cuenta'),
 ]

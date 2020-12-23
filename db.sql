@@ -34,6 +34,7 @@ CREATE TABLE Cuenta (
     tipo_cuenta VARCHAR(50) NOT NULL,
 	tipo_moneda VARCHAR(50) NOT NULL,
     id_usuario INT NOT NULL,
+    estado VARCHAR(20) NOT NULL,
     FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
 );
 

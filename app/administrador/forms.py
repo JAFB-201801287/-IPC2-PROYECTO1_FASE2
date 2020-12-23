@@ -59,5 +59,9 @@ class chequera(forms.Form):
     class Meta:
         fields = ("no_cuenta")
 
+class usuario(forms.Form):
+    usuario = forms.ModelChoiceField(required = True, help_text='', label='', queryset=Usuario.objects.all(), empty_label="SELECCIONE UN USUARIO", to_field_name="id_usuario")
 
+    class Meta:
+        fields = ("usuario")
 
