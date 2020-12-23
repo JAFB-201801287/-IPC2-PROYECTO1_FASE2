@@ -490,3 +490,54 @@ def transferencia_terceros(request):
                 "mensaje": mensaje
             }
     return render(request, 'cliente/formulario/index.html', variables)
+
+def chequera(request):
+    id_usuario = request.session['user']
+
+    form = estado()
+    form.fields['cuenta'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA').filter(tipo_cuenta='MONETARIA')
+    form_chequera = ''
+    ver_chequera = False
+
+    titulo_pantalla = "CHEQUERA"
+    texto_boton = "ACEPTAR"
+
+    variables = {
+        "titulo" : titulo_pantalla,
+        "texto_boton": texto_boton,
+        "form": form,
+        "form_chequera": form_chequera,
+        "ver_chequera": ver_chequera
+    }
+
+    if (request.method == "POST"):
+        form = estado(data=request.POST)
+        if form.is_valid():
+            datos = form.cleaned_data
+            cuenta = datos.get("cuenta")
+
+            form_chequera = cliente_chequera(data=request.POST)
+            form_chequera.fields['chequeras'].queryset = Chequera.objects.all().filter(id_cuenta=cuenta.id_cuenta)
+            form.fields['cuenta'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA').filter(tipo_cuenta='MONETARIA')
+            ver_chequera = True
+            if (request.method == "POST"):
+                if form_chequera.is_valid():
+                    print("------------------------------------------------------------------------------------------")
+            variables = {
+                "titulo" : titulo_pantalla,
+                "texto_boton": texto_boton,
+                "form": form,
+                "form_chequera": form_chequera,
+                "ver_chequera": ver_chequera
+            }
+        else:
+            form.fields['cuenta'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA').filter(tipo_cuenta='MONETARIA')
+            ver_chequera = False
+            variables = {
+                "titulo" : titulo_pantalla,
+                "texto_boton": texto_boton,
+                "form": form,
+                "form_chequera": form_chequera,
+                "ver_chequera": ver_chequera
+            }
+    return render(request, 'cliente/chequera/index.html', variables)

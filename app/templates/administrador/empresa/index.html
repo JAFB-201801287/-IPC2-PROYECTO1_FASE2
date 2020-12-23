@@ -12,13 +12,15 @@
                 <th><strong>NOMBRE</strong></th>
                 <th><strong>NOMBRE COMERCIAL</strong></th>
                 <th><strong>NOMBRE DEL REPRESENTANTE</strong></th>
+                <th><strong>TIPO DE EMPRESA</strong></th>
             </tr>
-            {% for a, b, c, d in lista %}
+            {% for empresa in empresas %}
                 <tr>
-                    <td>{{ a }}</td>
-                    <td>{{ b }}</td>
-                    <td>{{ c }}</td>
-                    <td>{{ d }}</td>
+                    <td>{{ empresa.id_empresa }}</td>
+                    <td>{{ empresa.nombre }}</td>
+                    <td>{{ empresa.nombre_comercial }}</td>
+                    <td>{{ empresa.nombre_representante }}</td>
+                    <td>{{ empresa.tipo_empresa }}</td>
                 </tr>
             {% endfor %}
 

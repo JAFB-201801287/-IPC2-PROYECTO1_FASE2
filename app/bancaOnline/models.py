@@ -91,6 +91,12 @@ class Chequera(models.Model):
     acabada = models.CharField(max_length=20)
     id_cuenta = models.ForeignKey('Cuenta', models.DO_NOTHING, db_column='id_cuenta')
 
+    def __str__(self):
+        return u'{0}'.format('CODIGO DE CHEQUERA: ' + str(self.id_cuenta) + ' ESTADO: ' + self.acabada)
+
+    def __unicode__(self):
+        return u'{0}'.format('CODIGO DE CHEQUERA: ' + str(self.id_cuenta) + ' ESTADO: ' + self.acabada)
+
     class Meta:
         managed = False
         db_table = 'chequera'
@@ -176,6 +182,7 @@ class Empresa(models.Model):
     nombre = models.CharField(max_length=100)
     nombre_comercial = models.CharField(max_length=100)
     nombre_representante = models.CharField(max_length=150)
+    tipo_empresa = models.CharField(max_length=150)
 
     class Meta:
         managed = False

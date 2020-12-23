@@ -28,10 +28,11 @@ class empresa(forms.Form):
     nombre = forms.CharField(required = True, max_length=100, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'NOMBRE DE EMPRESA'}))
     nombre_comercial = forms.CharField(required = True, max_length=100, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'NOMBRE COMERCIAL'}))
     nombre_representante = forms.CharField(required = True, max_length=150, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'NOMBRE DEL REPRESENTANTE'}))
+    tipo_empresa = forms.CharField(required = True, max_length=150, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'TIPO DE EMPRESA'}))
 
 
     class Meta:
-        fields = ("nombre_usuario","contrasena", "nombre", "nombre_comercial", "nombre_representante")
+        fields = ("nombre_usuario","contrasena", "nombre", "nombre_comercial", "nombre_representante", "tipo_empresa")
 
 class cuenta(forms.Form):
     monto = forms.FloatField(required = True, help_text='', label='', widget=forms.NumberInput(attrs={'placeholder': 'MONTO'}))

@@ -1,0 +1,24 @@
+{% extends 'cliente/base.html' %}
+{% block content %}
+    {% if ver_chequera == False %}
+        <div class="formulario">
+            <h2>{{ titulo }}</h2>
+            <br/>
+            <form method="POST">
+                {{ form.as_p }}
+                {% csrf_token %}
+                <button type="submit">{{ texto_boton }}</button>
+            </form>
+        </div>
+    {% elif ver_chequera %}
+        <div class="formulario">
+            <h2>{{ titulo }}</h2>
+            <br/>
+            <form method="POST">
+                {{ form_chequera.as_p }}
+                {% csrf_token %}
+                <button type="submit">{{ texto_boton }}</button>
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -122,13 +122,13 @@ def agregar_cliente(request):
 #-------------------------------------------------------------------------------------------------------------
 def lista_empresa(request):
     titulo_pantalla = "CLIENTES EMPRESARIALES"
-    a = Empresa.objects.all().values_list()  # devuelve una lista
+    empresas = Empresa.objects.all()  # devuelve una lista
 
-    if not a:
+    if not empresas:
         print("NO HAY EMPRESAS")
     variables = {
         "titulo" : titulo_pantalla,
-        "lista": a
+        "empresas": empresas
     }
     return render(request, 'administrador/empresa/index.html',variables)
 
@@ -156,6 +156,7 @@ def agregar_empresa(request):
             nombre = datos.get("nombre")
             nombre_comercial = datos.get("nombre_comercial")
             nombre_representante = datos.get("nombre_representante")
+            tipo_empresa = datos.get("tipo_empresa")
             host = 'localhost'
             db_name = 'banca_virtual'
             user = 'root'
@@ -164,7 +165,7 @@ def agregar_empresa(request):
             #Conexion a base de datos sin uso de modulos
             db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
             c = db.cursor()
-            consulta = "INSERT INTO Empresa(nombre, nombre_comercial, nombre_representante) VALUES('" + nombre + "', '" + nombre_comercial + "', '" + nombre_representante + "');"
+            consulta = "INSERT INTO Empresa(nombre, nombre_comercial, nombre_representante, tipo_empresa) VALUES('" + nombre + "', '" + nombre_comercial + "', '" + nombre_representante + "', '" + tipo_empresa + "');"
             c.execute(consulta)
             db.commit()
             c.close()

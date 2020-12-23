@@ -170,6 +170,7 @@ class Empresa(models.Model):
     nombre = models.CharField(max_length=100)
     nombre_comercial = models.CharField(max_length=100)
     nombre_representante = models.CharField(max_length=150)
+    tipo_empresa = models.CharField(max_length=150)
 
     class Meta:
         managed = False

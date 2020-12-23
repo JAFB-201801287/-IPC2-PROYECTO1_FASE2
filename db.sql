@@ -14,7 +14,8 @@ CREATE TABLE Empresa (
 	id_empresa INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
     nombre_comercial VARCHAR(100) NOT NULL,
-	nombre_representante VARCHAR(150) NOT NULL
+	nombre_representante VARCHAR(150) NOT NULL,
+    tipo_empresa VARCHAR(150) NOT NULL
 );
 
 CREATE TABLE Usuario (
