@@ -29,4 +29,5 @@ urlpatterns = [
     path('administrador/cuenta/deposito/', views.deposito, name='admistrador_deposito_cuenta'),
     path('administrador/chequera/agregar', views.agregar_chequera, name='admistrador_agregar_chequera'),
     path('administrador/usuario/activar', views.activar_usuario, name='admistrador_activar_usuario'),
+    path('administrador/usuario/', views.lista_usuarios, name='admistrador_usuario'),
 ]

@@ -352,6 +352,18 @@ def agregar_chequera(request):
             }
     return render(request, 'administrador/formulario.html', variables)
 
+def lista_usuarios(request):
+    titulo_pantalla = "USUARIOS"
+    usuarios = Usuario.objects.all()  # devuelve una lista
+
+    if not usuarios:
+        print("NO HAY USUARIOS")
+    variables = {
+        "titulo" : titulo_pantalla,
+        "usuarios": usuarios
+    }
+    return render(request, 'administrador/usuario/index.html',variables)
+
 def activar_usuario(request):
     form = usuario()
     form.fields['usuario'].queryset = Usuario.objects.all().filter(intentos__gte=3)

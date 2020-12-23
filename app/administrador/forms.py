@@ -48,7 +48,7 @@ class transaccion(forms.Form):
     monto = forms.FloatField(required = True, help_text='', label='', widget=forms.NumberInput(attrs={'placeholder': 'MONTO'}))
     TIPOS_MONEDA = [('', 'SELECCIONAR TIPO DE MONEDA'), ('QUETZAL', 'QUETZAL'), ('DOLLAR', 'DOLLAR')]
     tipo_moneda = forms.ChoiceField(required = True, help_text='', label='', choices=TIPOS_MONEDA)
-    cuenta = forms.ModelChoiceField(required = True, help_text='', label='', queryset=Cuenta.objects.all(), empty_label="SELECCIONE NUMERO DE CUENTA", to_field_name="id_cuenta")
+    cuenta = forms.ModelChoiceField(required = True, help_text='', label='', queryset=Cuenta.objects.all().filter(estado='ACTIVA'), empty_label="SELECCIONE NUMERO DE CUENTA", to_field_name="id_cuenta")
 
     class Meta:
         fields = ("monto", "tipo_moneda", "cuenta")

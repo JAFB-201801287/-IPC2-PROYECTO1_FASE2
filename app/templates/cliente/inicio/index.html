@@ -7,6 +7,17 @@
 
     <div class="formulario">
 
+        <h4>CODIGO DE USUARIO: {{ user.id_usuario }}</h4>
+        <h4>NOMBRE DE USUARIO: {{ user.nombre }}</h4>
+        <h4>INTETOS FALLIDOS PARA ENTRAR A LA CUENTA: {{ user.intentos }}</h4>
+        {% if user.cui == null  %}
+            <h4>TIPO DE USUARIO: EMPRESARIAL</h4>
+        {% elif user.id_empresa == null %}
+            <h4>TIPO DE USUARIO: CLIENTE INDIVIDUAL</h4>
+        {% endif %}
+        <p></p>
+        <br/>
+
         <h2>{{ titulo }}</h2>
         <p></p>
         <br/>
@@ -79,5 +90,9 @@
                 {% endif %}
             {% endfor %}
         </table>
+        <p></p>
+        <br/>
+        <p></p>
+        <br/>
     </div>
 {% endblock %}

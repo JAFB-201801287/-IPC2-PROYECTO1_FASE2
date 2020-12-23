@@ -74,7 +74,8 @@ def inicio(request):
     variables = {
         "titulo" : titulo_pantalla,
         "cuentas": cuentas,
-        "transacciones": transacciones
+        "transacciones": transacciones,
+        "user": user
     }
     return render(request, 'cliente/inicio/index.html', variables)
 
@@ -82,7 +83,7 @@ def deposito(request):
     id_usuario = request.session['user']
 
     form = transaccion()
-    form.fields['cuenta'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario)
+    form.fields['cuenta'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA')
 
     titulo_pantalla = "DEPOSITO MONETARIO EN CUENTA"
     texto_boton = "ACEPTAR"
