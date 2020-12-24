@@ -66,3 +66,9 @@ class usuario(forms.Form):
     class Meta:
         fields = ("usuario")
 
+class a_correlativo(forms.Form):
+    correlativo = forms.IntegerField(required = True, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'CORRELATIVO DE CHEQUE'}))
+
+    class Meta:
+        fields = ("correlativo")
+

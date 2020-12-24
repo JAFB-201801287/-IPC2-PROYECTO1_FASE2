@@ -3,6 +3,7 @@ from .forms import *
 import MySQLdb
 from django.db.models import Q
 from random import choice
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 
@@ -493,6 +494,89 @@ def activar_usuario(request):
             }
         else:
             form.fields['usuario'].queryset = Usuario.objects.all().filter(intentos__gte=3)
+            mensaje_error = "ERROR NO SE PUDO HACER LA CONSULTA"
+            variables = {
+                "titulo" : titulo_pantalla,
+                "texto_boton": texto_boton,
+                "regresar": regresar,
+                "form": form,
+                "mensaje_error": mensaje_error
+            }
+    return render(request, 'administrador/formulario.html', variables)
+
+
+def cobrar_cheque(request):
+    form = a_correlativo()
+    titulo_pantalla = "COBRAR CHEQUE"
+    texto_boton = "ACEPTAR"
+    regresar = 'admistrador_cuenta'
+    mensaje_error = ""
+    mensaje_error = ""
+    variables = {
+        "titulo" : titulo_pantalla,
+        "texto_boton": texto_boton,
+        "regresar": regresar,
+        "form": form,
+        "mensaje_error": mensaje_error
+    }
+    if (request.method == "POST"):
+        form = a_correlativo(data=request.POST)
+        if form.is_valid():
+            datos = form.cleaned_data
+            correlativo = datos.get("correlativo")
+
+            host = 'localhost'
+            db_name = 'banca_virtual'
+            user = 'root'
+            contra = 'FloresB566+'
+            #puerto = 3306
+            #Conexion a base de datos sin uso de modulos
+
+            try:
+                cheque =  Cheque.objects.select_related('id_chequera').get(id_cheque = correlativo)
+                if(cheque.autorizado == "SI"):
+
+                    id_cuenta = cheque.id_chequera.id_cuenta.id_cuenta
+                    monto_anterior = cheque.id_chequera.id_cuenta.monto
+                    monto_despues = (cheque.id_chequera.id_cuenta.monto - cheque.monto)
+                    tipo_moneda = cheque.id_chequera.id_cuenta.tipo_moneda
+                    monto= cheque.monto
+
+                    db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+                    c = db.cursor()
+                    consulta = "UPDATE Cheque SET disponible = 'NO' WHERE id_cheque = '" + str(correlativo) + "';"
+                    c.execute(consulta)
+                    db.commit()
+                    c.close()
+
+                    db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+                    c = db.cursor()
+                    consulta = "UPDATE Cuenta SET monto = '" + str(monto_despues) + "' WHERE id_cuenta = '" + str(id_cuenta) + "';"
+                    c.execute(consulta)
+                    db.commit()
+                    c.close()
+
+                    db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+                    c = db.cursor()
+                    consulta = "INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('" + str(monto) + "', '" + str(monto_anterior) + "', '" + str(monto_despues) + "', '" + tipo_moneda + "', 'CHEQUE', '" + str(id_cuenta) +"');"
+                    c.execute(consulta)
+                    db.commit()
+                    c.close()
+
+                    mensaje_error = "SE COBRO EL CHEQUE"
+            except ObjectDoesNotExist:
+                print('No existe')
+                mensaje_error = "NO SE PUDO COBRAR EL CHEQUE"
+            
+            form = a_correlativo()
+            variables = {
+                "titulo" : titulo_pantalla,
+                "texto_boton": texto_boton,
+                "regresar": regresar,
+                "form": form,
+                "mensaje_error": mensaje_error
+            }
+        else:
             mensaje_error = "ERROR NO SE PUDO HACER LA CONSULTA"
             variables = {
                 "titulo" : titulo_pantalla,

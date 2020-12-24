@@ -104,5 +104,6 @@ INSERT INTO Transaccion(acabada, id_cuenta) VALUES('', '');
 DELETE FROM Chequera WHERE id_chequera = '3';
 SELECT * FROM Cheque;
 INSERT INTO Cheque(monto, autorizado, disponible, id_chequera) VALUES('0', 'NO', 'SI', '');
-UPDATE Cheque SET monto = '0', autorizado = 'NO' WHERE id_chequera = '1';
+UPDATE Cheque SET monto = '0', autorizado = 'NO' WHERE id_cheque = '1';
+UPDATE Cheque SET disponible = 'NO' WHERE id_cheque = '1';
 
