@@ -27,5 +27,8 @@ urlpatterns = [
     path('cliente/transaccion/suspender', views.suspender_cuenta, name='suspender_cuenta'),
     path('cliente/transaccion/propia', views.transferencia_propias, name='trasnferencias_propias'),
     path('cliente/transaccion/terceros', views.transferencia_terceros, name='trasnferencias_terceros'),
-    path('cliente/chequera', views.chequera, name='cliente_chequera'),
+    path('cliente/chequera/', views.cliente_chequera, name='cliente_chequera'),
+    path('cliente/chequera1/', views.cliente_chequera1, name='cliente_chequera1'),
+    path('cliente/chequera2/', views.cliente_chequera2, name='cliente_chequera2'),
+    path('cliente/cheque/', views.cliente_cheque, name='cliente_cheque'),
 ]

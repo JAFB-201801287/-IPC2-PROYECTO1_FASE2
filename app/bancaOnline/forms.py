@@ -41,8 +41,26 @@ class cuentas_terceros(forms.Form):
     class Meta:
         fields = ("monto", "tipo_moneda", "cuenta1" , "no_cuenta")
 
-class cliente_chequera(forms.Form):
-    chequeras = forms.ModelChoiceField(required = True, help_text='', label='', queryset=Chequera.objects.all(), empty_label="SELECCIONE NUMERO DE CHEQUERA", to_field_name="id_chequera")
+class c_chequera(forms.Form):
+    chequera = forms.ModelChoiceField(required = True, help_text='', label='', queryset=Chequera.objects.all(), empty_label="SELECCIONE NUMERO DE CHEQUERA", to_field_name="id_chequera")
 
     class Meta:
-        fields = ("chequeras")
+        fields = ("chequera")
+
+class c_cheque(forms.Form):
+    cheque = forms.ModelChoiceField(required = True, help_text='', label='', queryset=Cheque.objects.all(), empty_label="SELECCIONE NUMERO DE CHEQUE", to_field_name="id_cheque")
+
+    class Meta:
+        fields = ("cheque")
+
+class c_cheque1(forms.Form):
+    cheque = forms.ModelChoiceField(required = True, help_text='', label='', queryset=Cheque.objects.all(), empty_label="SELECCIONE NUMERO DE CHEQUE", to_field_name="id_cheque")
+
+    class Meta:
+        fields = ("cheque")
+
+class c_monto(forms.Form):
+    monto = forms.FloatField(required = True, help_text='', label='', widget=forms.NumberInput(attrs={'placeholder': 'MONTO DEL CHEQUE EN QUETZALES'}))
+
+    class Meta:
+        fields = ("monto")

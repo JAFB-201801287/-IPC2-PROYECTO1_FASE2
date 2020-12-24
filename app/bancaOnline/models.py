@@ -81,6 +81,12 @@ class Cheque(models.Model):
     disponible = models.CharField(max_length=20)
     id_chequera = models.ForeignKey('Chequera', models.DO_NOTHING, db_column='id_chequera')
 
+    def __str__(self):
+        return u'{0}'.format(f'-CORRELATIVO: { str(self.id_cheque) } -MONTO: { str(self.monto) } -AUTORIZADO: { self.autorizado } -DISPONIBLE: { self.disponible }')
+
+    def __unicode__(self):
+        return u'{0}'.format(f'-CORRELATIVO: { str(self.id_cheque) } -MONTO: { str(self.monto) } -AUTORIZADO: { self.autorizado } -DISPONIBLE: { self.disponible }')
+
     class Meta:
         managed = False
         db_table = 'cheque'

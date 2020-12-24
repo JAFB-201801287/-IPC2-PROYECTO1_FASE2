@@ -1,24 +1,34 @@
 {% extends 'cliente/base.html' %}
 {% block content %}
-    {% if ver_chequera == False %}
-        <div class="formulario">
-            <h2>{{ titulo }}</h2>
-            <br/>
-            <form method="POST">
-                {{ form.as_p }}
-                {% csrf_token %}
-                <button type="submit">{{ texto_boton }}</button>
-            </form>
-        </div>
-    {% elif ver_chequera %}
-        <div class="formulario">
-            <h2>{{ titulo }}</h2>
-            <br/>
-            <form method="POST">
-                {{ form_chequera.as_p }}
-                {% csrf_token %}
-                <button type="submit">{{ texto_boton }}</button>
-            </form>
-        </div>
-    {% endif %}
+    <div class="formulario">
+        <h2>{{ titulo }}</h2>
+        <br/>
+        <form method="POST">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <button type="submit">{{ texto_boton }}</button>
+            <a class="button" href="{% url regresar %}">REGRESAR</a>
+        </form>
+        <p></p>
+        <p>{{ mensaje }}</p>
+        <p></p>
+        <br/>
+        <table class="tabla">
+            <tr>
+                <th><strong>CORRELATIVO</strong></th>
+                <th><strong>MONTO</strong></th>
+                <th><strong>AUTORIZADO</strong></th>
+                <th><strong>DISPONIBLE</strong></th>
+            </tr>
+            {% for cheque in cheques %}
+                <tr>
+                    <td>{{ cheque.id_cheque }}</td>
+                    <td>Q {{ cheque.monto }}</td>
+                    <td>{{ cheque.autorizado }}</td>
+                    <td>{{ cheque.disponible }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    
 {% endblock %}

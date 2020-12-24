@@ -491,23 +491,21 @@ def transferencia_terceros(request):
             }
     return render(request, 'cliente/formulario/index.html', variables)
 
-def chequera(request):
+def cliente_chequera(request):
     id_usuario = request.session['user']
 
     form = estado()
-    form.fields['cuenta'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA').filter(tipo_cuenta='MONETARIA')
-    form_chequera = ''
-    ver_chequera = False
+    form.fields['cuenta'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA')
 
-    titulo_pantalla = "CHEQUERA"
+    titulo_pantalla = "ESCOGER CUENTA DE CHEQUERA"
     texto_boton = "ACEPTAR"
+    regresar = 'cliente_inicio'
 
     variables = {
         "titulo" : titulo_pantalla,
         "texto_boton": texto_boton,
-        "form": form,
-        "form_chequera": form_chequera,
-        "ver_chequera": ver_chequera
+        "regresar": regresar,
+        "form": form
     }
 
     if (request.method == "POST"):
@@ -516,28 +514,139 @@ def chequera(request):
             datos = form.cleaned_data
             cuenta = datos.get("cuenta")
 
-            form_chequera = cliente_chequera(data=request.POST)
-            form_chequera.fields['chequeras'].queryset = Chequera.objects.all().filter(id_cuenta=cuenta.id_cuenta)
-            form.fields['cuenta'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA').filter(tipo_cuenta='MONETARIA')
-            ver_chequera = True
-            if (request.method == "POST"):
-                if form_chequera.is_valid():
-                    print("------------------------------------------------------------------------------------------")
-            variables = {
-                "titulo" : titulo_pantalla,
-                "texto_boton": texto_boton,
-                "form": form,
-                "form_chequera": form_chequera,
-                "ver_chequera": ver_chequera
-            }
+            request.session["cuenta"] = cuenta.id_cuenta
+            return redirect('/cliente/chequera1/')
         else:
-            form.fields['cuenta'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='ACTIVA').filter(tipo_cuenta='MONETARIA')
-            ver_chequera = False
+            form.fields['cuenta'].queryset = Cuenta.objects.all().filter(id_usuario=id_usuario).filter(estado='SUSPENDIDA')
             variables = {
                 "titulo" : titulo_pantalla,
                 "texto_boton": texto_boton,
+                "regresar": regresar,
+                "form": form
+            }
+    return render(request, 'cliente/formulario/index.html', variables)
+
+def cliente_chequera1(request):
+    id_cuenta = request.session['cuenta']
+
+    form = c_chequera()
+    form.fields['chequera'].queryset = Chequera.objects.all().filter(id_cuenta=id_cuenta)
+
+    titulo_pantalla = "ESCOGER CHEQUERA"
+    texto_boton = "ACEPTAR"
+    regresar = 'cliente_chequera'
+
+    variables = {
+        "titulo" : titulo_pantalla,
+        "texto_boton": texto_boton,
+        "regresar": regresar,
+        "form": form
+    }
+
+    if (request.method == "POST"):
+        form = c_chequera(data=request.POST)
+        if form.is_valid():
+            datos = form.cleaned_data
+            chequera = datos.get("chequera")
+
+            request.session["chequera"] = chequera.id_chequera
+            return redirect('/cliente/chequera2/')
+        else:
+            form.fields['chequera'].queryset = Chequera.objects.all().filter(id_cuenta=id_cuenta)
+            variables = {
+                "titulo" : titulo_pantalla,
+                "texto_boton": texto_boton,
+                "regresar": regresar,
+                "form": form
+            }
+    return render(request, 'cliente/formulario/index.html', variables)
+
+
+def cliente_chequera2(request):
+    id_chequera = request.session['chequera']
+
+    form = c_cheque()
+    form.fields['cheque'].queryset = Cheque.objects.all().filter(id_chequera=id_chequera)
+    cheques = Cheque.objects.all().filter(id_chequera=id_chequera)
+
+    titulo_pantalla = "ESCOGER CHEQUE"
+    texto_boton = "ACEPTAR"
+    regresar = 'cliente_chequera1'
+
+    variables = {
+        "titulo" : titulo_pantalla,
+        "texto_boton": texto_boton,
+        "regresar": regresar,
+        "form": form,
+        "cheques": cheques
+    }
+
+    if (request.method == "POST"):
+        form = c_cheque(data=request.POST)
+        if form.is_valid():
+            datos = form.cleaned_data
+            cheque = datos.get("cheque")
+
+            request.session["cheque"] = cheque.id_cheque
+            return redirect('/cliente/cheque/')
+        else:
+            form.fields['cheque'].queryset = Cheque.objects.all().filter(id_chequera=id_chequera)
+            cheques = Cheque.objects.all().filter(id_chequera=id_chequera)
+            variables = {
+                "titulo" : titulo_pantalla,
+                "texto_boton": texto_boton,
+                "regresar": regresar,
                 "form": form,
-                "form_chequera": form_chequera,
-                "ver_chequera": ver_chequera
+                "cheques": cheques
             }
     return render(request, 'cliente/chequera/index.html', variables)
+
+
+def cliente_cheque(request):
+    id_cheque = request.session['cheque']
+
+    form = c_monto()
+    #form.fields['cheque'].queryset = Cheque.objects.all().filter(id_chequera=id_chequera)
+
+    titulo_pantalla = "PRE-AUTORIZACION DE CHUEQUES"
+    texto_boton = "AUTORIZAR"
+    regresar = 'cliente_chequera2'
+
+    variables = {
+        "titulo" : titulo_pantalla,
+        "texto_boton": texto_boton,
+        "regresar": regresar,
+        "form": form
+    }
+
+    if (request.method == "POST"):
+        form = c_monto(data=request.POST)
+        if form.is_valid():
+            datos = form.cleaned_data
+            monto = datos.get("monto")
+
+            host = 'localhost'
+            db_name = 'banca_virtual'
+            user = 'root'
+            contra = 'FloresB566+'
+            #puerto = 3306
+            #Conexion a base de datos sin uso de modulos            
+
+            db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
+            c = db.cursor()
+            consulta = f"UPDATE Cheque SET monto = '" + str(monto) + "', autorizado = 'SI' WHERE id_cheque = '" + str(id_cheque) + "';"
+            c.execute(consulta)
+            db.commit()
+            c.close()
+
+            return redirect('/cliente/chequera2/')
+        else:
+            #form.fields['cheque'].queryset = Cheque.objects.all().filter(id_chequera=id_chequera)
+            variables = {
+                "titulo" : titulo_pantalla,
+                "texto_boton": texto_boton,
+                "regresar": regresar,
+                "form": form
+            }
+    return render(request, 'cliente/formulario/index.html', variables)
+    

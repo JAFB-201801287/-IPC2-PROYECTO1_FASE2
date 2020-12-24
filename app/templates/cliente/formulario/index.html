@@ -7,9 +7,10 @@
             {{ form.as_p }}
             {% csrf_token %}
             <button type="submit">{{ texto_boton }}</button>
+            <a class="button" href="{% url regresar %}">REGRESAR</a>
         </form>
         <p></p>
         <p>{{ mensaje }}</p>
     </div>
-    <a class="button" href="{% url regresar %}">REGRESAR</a>
+
 {% endblock %}
