@@ -90,7 +90,7 @@ SELECT * FROM Cliente;
 INSERT INTO Cliente(cui, nit, nombre, apellido, fecha_nacimiento) VALUES('3007153150101', '544554545454', 'Jose Andres', 'Flores Barco', '21/12/2020');
 SELECT * FROM Usuario;
 INSERT INTO Usuario(nombre, contrasena, cui, intentos) VALUES('', '', '');
-UPDATE Usuario SET intentos = '' WHERE id_cuenta = '';
+UPDATE Usuario SET intentos = '', contrasena = '' WHERE id_usuario = '';
 SELECT * FROM Empresa;
 INSERT INTO Empresa(nombre, nombre_comercial, nombre_representante) VALUES('', '', '');
 SELECT * FROM Cuenta;
@@ -103,4 +103,5 @@ INSERT INTO Transaccion(acabada, id_cuenta) VALUES('', '');
 DELETE FROM Chequera WHERE id_chequera = '3';
 SELECT * FROM Cheque;
 INSERT INTO Cheque(monto, autorizado, disponible, id_chequera) VALUES('0', 'NO', 'SI', '');
+UPDATE Cheque SET monto = '0', autorizado = 'NO' WHERE id_chequera = '1';
 

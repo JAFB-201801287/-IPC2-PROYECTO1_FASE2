@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import *
 import MySQLdb
 from django.db.models import Q
+from random import choice
 
 # Create your views here.
 
@@ -448,6 +449,22 @@ def activar_usuario(request):
         if form.is_valid():
             datos = form.cleaned_data
             usu = datos.get("usuario")
+            longitud = 6
+            valores = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ<=>@#%&+"
+            p1 = ""
+            p1 = p1.join([choice(valores) for i in range(longitud)])
+
+            longitud = 2
+            valores = "0123456789"
+            p2 = ""
+            p2 = p2.join([choice(valores) for i in range(longitud)])
+
+            longitud = 2
+            valores = "<=>@#%&+"
+            p3 = ""
+            p3 = p3.join([choice(valores) for i in range(longitud)])
+
+            contrasena = p1 + p2 + p3
 
             host = 'localhost'
             db_name = 'banca_virtual'
@@ -458,7 +475,7 @@ def activar_usuario(request):
 
             db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
             c = db.cursor()
-            consulta = "UPDATE Usuario SET intentos = '0' WHERE id_usuario = '" + str(usu.id_usuario) + "';"
+            consulta = "UPDATE Usuario SET intentos = '0', contrasena = '" + contrasena + "' WHERE id_usuario = '" + str(usu.id_usuario) + "';"
             c.execute(consulta)
             db.commit()
             c.close()
@@ -466,7 +483,7 @@ def activar_usuario(request):
 
             form = usuario()
             form.fields['usuario'].queryset = Usuario.objects.all().filter(intentos__gte=3)
-            mensaje_error = "SE ACTIVO CON EXITO LA CUENTA"
+            mensaje_error = f"SE ACTIVO CON EXITO EL USUARIO ( CONTRASEÑA: { contrasena } )"
             variables = {
                 "titulo" : titulo_pantalla,
                 "texto_boton": texto_boton,
