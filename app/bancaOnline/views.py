@@ -330,7 +330,7 @@ def transferencia_propias(request):
 
                 db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
                 c = db.cursor()
-                consulta = "INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('" + str(monto) + "', '" + str(monto1_anterior) + "', '" + str(monto1_despues) + "', '" + cuenta1.tipo_moneda + "', 'TRANSFERENCIA A CUENTA', '" + str(cuenta1.id_cuenta) +"');"
+                consulta = "INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('" + str(monto) + "', '" + str(monto1_anterior) + "', '" + str(monto1_despues) + "', '" + cuenta1.tipo_moneda + "', 'EMISION DE TRANSFERENCIA', '" + str(cuenta1.id_cuenta) +"');"
                 c.execute(consulta)
                 db.commit()
                 c.close()
@@ -344,7 +344,7 @@ def transferencia_propias(request):
 
                 db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
                 c = db.cursor()
-                consulta = "INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('" + str(monto) + "', '" + str(monto2_anterior) + "', '" + str(monto2_despues) + "', '" + cuenta1.tipo_moneda + "', 'TRANSFERENCIA A CUENTA', '" + str(cuenta2.id_cuenta) +"');"
+                consulta = "INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('" + str(monto) + "', '" + str(monto2_anterior) + "', '" + str(monto2_despues) + "', '" + cuenta1.tipo_moneda + "', 'RESEPCION DE TRANSFERENCIA', '" + str(cuenta2.id_cuenta) +"');"
                 c.execute(consulta)
                 db.commit()
                 c.close()
@@ -438,7 +438,7 @@ def transferencia_terceros(request):
 
                     db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
                     c = db.cursor()
-                    consulta = "INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('" + str(monto) + "', '" + str(monto1_anterior) + "', '" + str(monto1_despues) + "', '" + cuenta1.tipo_moneda + "', 'TRANSFERENCIA A CUENTA', '" + str(cuenta1.id_cuenta) +"');"
+                    consulta = "INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('" + str(monto) + "', '" + str(monto1_anterior) + "', '" + str(monto1_despues) + "', '" + cuenta1.tipo_moneda + "', 'EMISION DE TRANSFERENCIA', '" + str(cuenta1.id_cuenta) +"');"
                     c.execute(consulta)
                     db.commit()
                     c.close()
@@ -452,7 +452,7 @@ def transferencia_terceros(request):
 
                     db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
                     c = db.cursor()
-                    consulta = "INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('" + str(monto) + "', '" + str(monto2_anterior) + "', '" + str(monto2_despues) + "', '" + cuenta1.tipo_moneda + "', 'TRANSFERENCIA A CUENTA', '" + str(cuenta2.id_cuenta) +"');"
+                    consulta = "INSERT INTO Transaccion(monto, monto_anterior, monto_despues, tipo_moneda, tipo_transaccion, id_cuenta) VALUES('" + str(monto) + "', '" + str(monto2_anterior) + "', '" + str(monto2_despues) + "', '" + cuenta1.tipo_moneda + "', 'RESEPCION DE TRANSFERENCIA', '" + str(cuenta2.id_cuenta) +"');"
                     c.execute(consulta)
                     db.commit()
                     c.close()
@@ -567,7 +567,7 @@ def cliente_chequera2(request):
 
     form = c_cheque()
     form.fields['cheque'].queryset = Cheque.objects.all().filter(id_chequera=id_chequera)
-    cheques = Cheque.objects.all().filter(id_chequera=id_chequera)
+    cheques = Cheque.objects.all().filter(id_chequera=id_chequera).select_related('id_chequera')
 
     titulo_pantalla = "ESCOGER CHEQUE"
     texto_boton = "ACEPTAR"
@@ -624,6 +624,7 @@ def cliente_cheque(request):
         if form.is_valid():
             datos = form.cleaned_data
             monto = datos.get("monto")
+            nombre = datos.get("nombre")
 
             host = 'localhost'
             db_name = 'banca_virtual'
@@ -634,7 +635,7 @@ def cliente_cheque(request):
 
             db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
             c = db.cursor()
-            consulta = f"UPDATE Cheque SET monto = '" + str(monto) + "', autorizado = 'SI' WHERE id_cheque = '" + str(id_cheque) + "';"
+            consulta = f"UPDATE Cheque SET nombre = '" + nombre + "', monto = '" + str(monto) + "', autorizado = 'SI' WHERE id_cheque = '" + str(id_cheque) + "';"
             c.execute(consulta)
             db.commit()
             c.close()

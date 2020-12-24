@@ -16,6 +16,7 @@
         <table class="tabla">
             <tr>
                 <th><strong>CORRELATIVO</strong></th>
+                <th><strong>RECEPTOR</strong></th>
                 <th><strong>MONTO</strong></th>
                 <th><strong>AUTORIZADO</strong></th>
                 <th><strong>DISPONIBLE</strong></th>
@@ -23,7 +24,13 @@
             {% for cheque in cheques %}
                 <tr>
                     <td>{{ cheque.id_cheque }}</td>
-                    <td>Q {{ cheque.monto }}</td>
+                    <td>{{ cheque.nombre }}</td>
+                    {% if cheque.id_chequera.id_cuenta.tipo_moneda == 'QUETZAL' %}
+                        <td>Q {{ cheque.monto }}</td>
+                    {% elif cheque.id_chequera.id_cuenta.tipo_moneda == 'DOLLAR' %}
+                        <td>$ {{ cheque.monto }}</td>
+                    {% endif %}
+                    
                     <td>{{ cheque.autorizado }}</td>
                     <td>{{ cheque.disponible }}</td>
                 </tr>

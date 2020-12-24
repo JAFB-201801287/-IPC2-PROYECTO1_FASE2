@@ -83,6 +83,7 @@ CREATE TABLE Cheque (
     autorizado VARCHAR(20) NOT NULL,
     disponible VARCHAR(20) NOT NULL,
     id_chequera INT NOT NULL,
+    nombre VARCHAR(100),
     FOREIGN KEY (id_chequera) REFERENCES Chequera(id_chequera)
 );
 

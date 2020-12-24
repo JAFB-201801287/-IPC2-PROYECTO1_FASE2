@@ -80,6 +80,7 @@ class Cheque(models.Model):
     autorizado = models.CharField(max_length=20)
     disponible = models.CharField(max_length=20)
     id_chequera = models.ForeignKey('Chequera', models.DO_NOTHING, db_column='id_chequera')
+    nombre = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return u'{0}'.format(f'-CORRELATIVO: { str(self.id_cheque) } -MONTO: { str(self.monto) } -AUTORIZADO: { self.autorizado } -DISPONIBLE: { self.disponible }')

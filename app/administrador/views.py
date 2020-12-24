@@ -386,7 +386,7 @@ def agregar_chequera(request):
                 for i in range(20):
                     db = MySQLdb.connect(host=host, user= user, password=contra, db=db_name, connect_timeout=5)
                     c = db.cursor()
-                    consulta = "INSERT INTO Cheque(monto, autorizado, disponible, id_chequera) VALUES('0', 'NO', 'SI', '" + str(temp.id_chequera) + "');"
+                    consulta = "INSERT INTO Cheque(monto, autorizado, disponible, id_chequera, nombre) VALUES('0', 'NO', 'SI', '" + str(temp.id_chequera) + "', 'VACIO');"
                     c.execute(consulta)
                     db.commit()
                     c.close()

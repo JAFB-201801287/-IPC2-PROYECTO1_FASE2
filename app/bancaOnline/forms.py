@@ -60,7 +60,8 @@ class c_cheque1(forms.Form):
         fields = ("cheque")
 
 class c_monto(forms.Form):
-    monto = forms.FloatField(required = True, help_text='', label='', widget=forms.NumberInput(attrs={'placeholder': 'MONTO DEL CHEQUE EN QUETZALES'}))
+    nombre = forms.CharField(required = True, max_length=20, help_text='', label='', widget=forms.TextInput(attrs={'placeholder': 'NOMBRE DE RECEPTOR', 'class': 'text_box'}))
+    monto = forms.FloatField(required = True, help_text='', label='', widget=forms.NumberInput(attrs={'placeholder': 'MONTO DEL CHEQUE'}))
 
     class Meta:
-        fields = ("monto")
+        fields = ("monto", "nombre")
